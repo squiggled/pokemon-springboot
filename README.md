@@ -24,12 +24,14 @@ cd pokemon-project
 
 ### Installation with Docker
 Build the Docker image
-```docker build -t pokemon-springboot .
+```bash
+docker build -t pokemon-springboot .
 ```
 
 
 ### Run the container
-```docker run -d -p 8080:8080 pokemon-springboot
+```bash
+docker run -d -p 8080:8080 pokemon-springboot
 ```
 
 ### Dependencies
