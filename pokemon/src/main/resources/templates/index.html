@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Pokédex</title>
     <!-- Include Tailwind CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/pokemon.256x234.ico}" />
 </head>
 <body class="bg-gray-100">
 
@@ -26,7 +27,7 @@
     </div>
 
     <!-- Pokémon Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
         <!-- Iterate over the first 20 Pokémon -->
         <div th:each="pokemon, iterStat : ${pokemonList}" th:if="${iterStat.count <= 20}" class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
             <img th:src="${pokemon.imageUrl}" alt="Pokémon Image" class="w-full">
@@ -42,7 +43,52 @@
                 </p>
             </div>
             <div class="px-6 pt-4 pb-2">
-                <span th:each="type : ${pokemon.type1}" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2" th:text="${type}">Type</span>
+                <span th:if="${pokemon.type1 != null}" 
+                  th:text="${pokemon.type1.name()}" 
+                  th:classappend="${'NORMAL'.equals(pokemon.type1.name()) ? 'bg-slate-200 text-black' :
+                                    'FIRE'.equals(pokemon.type1.name()) ? 'bg-red-500 text-white ' :
+                                   'WATER'.equals(pokemon.type1.name()) ? 'bg-blue-500 text-white ' :
+                                   'ELECTRIC'.equals(pokemon.type1.name()) ? 'bg-yellow-400 text-white ' :
+                                   'GRASS'.equals(pokemon.type1.name()) ? 'bg-green-500 text-white ' :
+                                   'ICE'.equals(pokemon.type1.name()) ? 'bg-cyan-200 text-white ' :
+                                   'FIGHTING'.equals(pokemon.type1.name()) ? 'bg-amber-700 text-white ' :
+                                   'POISON'.equals(pokemon.type1.name()) ? 'bg-purple-800 text-white ' :
+                                   'GROUND'.equals(pokemon.type1.name()) ? 'bg-yellow-950 text-white ' :
+                                   'FLYING'.equals(pokemon.type1.name()) ? 'bg-blue-200 text-white ' :
+                                   'PSYCHIC'.equals(pokemon.type1.name()) ? 'bg-pink-500 text-white ' :
+                                   'BUG'.equals(pokemon.type1.name()) ? 'bg-lime-500 text-white ' :
+                                   'ROCK'.equals(pokemon.type1.name()) ? 'bg-stone-600 text-white ' :
+                                   'GHOST'.equals(pokemon.type1.name()) ? 'bg-slate-900 text-white ' :
+                                   'DRAGON'.equals(pokemon.type1.name()) ? 'bg-fuschia-500 text-white '  : 
+                                   'DARK'.equals(pokemon.type1.name()) ? 'bg-gray-950 text-white ' :
+                                   'STEEL'.equals(pokemon.type1.name()) ? 'bg-slate-400 text-white ' :
+                                   'FAIRY'.equals(pokemon.type1.name()) ? 'bg-pink-200 text-white ' : ''}" 
+                  class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                Type 1
+            </span>
+            <span th:if="${pokemon.type2 != null}" 
+                  th:text="${pokemon.type2.name()}" 
+                  th:classappend="${'NORMAL'.equals(pokemon.type2.name()) ? 'bg-slate-200 text-black' :
+                                    'FIRE'.equals(pokemon.type2.name()) ? 'bg-red-500 text-white ' :
+                                   'WATER'.equals(pokemon.type2.name()) ? 'bg-blue-500 text-white ' :
+                                   'ELECTRIC'.equals(pokemon.type2.name()) ? 'bg-yellow-400 text-white ' :
+                                   'GRASS'.equals(pokemon.type2.name()) ? 'bg-green-500 text-white ' :
+                                   'ICE'.equals(pokemon.type2.name()) ? 'bg-cyan-200 text-white ' :
+                                   'FIGHTING'.equals(pokemon.type2.name()) ? 'bg-amber-700 text-white ' :
+                                   'POISON'.equals(pokemon.type2.name()) ? 'bg-purple-800 text-white ' :
+                                   'GROUND'.equals(pokemon.type2.name()) ? 'bg-yellow-950 text-white ' :
+                                   'FLYING'.equals(pokemon.type2.name()) ? 'bg-blue-200 text-white ' :
+                                   'PSYCHIC'.equals(pokemon.type2.name()) ? 'bg-pink-500 text-white ' :
+                                   'BUG'.equals(pokemon.type2.name()) ? 'bg-lime-200 text-white ' :
+                                   'ROCK'.equals(pokemon.type2.name()) ? 'bg-stone-600 text-white ' :
+                                   'GHOST'.equals(pokemon.type2.name()) ? 'bg-slate-900 text-white ' :
+                                   'DRAGON'.equals(pokemon.type2.name()) ? 'bg-fuschia-500 text-white ' : 
+                                   'DARK'.equals(pokemon.type2.name()) ? 'bg-gray-950 text-white ' :
+                                   'STEEL'.equals(pokemon.type2.name()) ? 'bg-slate-400 text-white ' :
+                                   'FAIRY'.equals(pokemon.type2.name()) ? 'bg-pink-200 text-white ' : ''}" 
+                  class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                Type 2
+            </span>
             </div>
         </div>
     </div>
