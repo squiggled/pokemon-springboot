@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokédex</title>
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.4/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto px-4">
+    <div class="py-5">
+        <!-- Search Bar -->
+        <div class="flex flex-wrap items-center justify-between">
+            <div class="max-w-lg w-full lg:max-w-xs">
+                <label for="search" class="sr-only">Search for Pokémon</label>
+                <div class="relative">
+                    <input type="text" id="search" class="block w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring-blue sm:text-sm"
+                           placeholder="Search for Pokémon" disabled>
+                </div>
+            </div>
+            <button class="ml-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled>
+                Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Pokémon Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <!-- Iterate over the first 20 Pokémon -->
+        <div th:each="pokemon, iterStat : ${pokemonList}" th:if="${iterStat.count <= 20}" class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
+            <img th:src="${pokemon.imageUrl}" alt="Pokémon Image" class="w-full">
+            <div class="px-6 py-4">
+                <div class="font-bold text-xl mb-2" th:text="${pokemon.name}">Pokémon Name</div>
+                <p class="text-gray-700 text-base">
+                    HP: <span th:text="${pokemon.baseHP}">100</span><br>
+                    Attack: <span th:text="${pokemon.baseAtk}">100</span><br>
+                    Defense: <span th:text="${pokemon.baseDef}">100</span><br>
+                    Special Attack: <span th:text="${pokemon.baseSpA}">100</span><br>
+                    Special Defense: <span th:text="${pokemon.baseSpD}">100</span><br>
+                    Speed: <span th:text="${pokemon.baseSpe}">100</span>
+                </p>
+            </div>
+            <div class="px-6 pt-4 pb-2">
+                <span th:each="type : ${pokemon.type1}" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2" th:text="${type}">Type</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
