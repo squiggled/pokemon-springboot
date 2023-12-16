@@ -17,16 +17,18 @@ import jakarta.json.JsonValue;
 import proj1.vttp.pokemon.model.Move;
 import proj1.vttp.pokemon.model.Pokemon;
 import proj1.vttp.pokemon.model.PokemonType;
+import proj1.vttp.pokemon.model.SimplePokemon;
 
 //for fetching data from external API
 @Service
 public class PokeAPIService {
 
-    String URL_POKEDETAILS;
-    RestTemplate template = new RestTemplate();
-    List<Pokemon> pokemonToShow = new LinkedList<>();
+    String URL_POKEDETAILS = "https://pokeapi.co/api/v2/pokemon/";
 
-    public List<Pokemon> showIntialPokemon(){
+    RestTemplate template = new RestTemplate();
+    List<SimplePokemon> pokemonToShow = new LinkedList<>();
+
+    public List<SimplePokemon> showIntialPokemon() {
         return pokemonToShow;
     }
 
@@ -38,10 +40,10 @@ public class PokeAPIService {
         JsonArray innerArray = outerObj.getJsonArray("results");
         // System.out.println(innerArray);
 
-        fetchPokemonData(innerArray);
+        fetchSimplePokemonData(innerArray);
     }
 
-    public void fetchPokemonData(JsonArray jsonArray) {
+    public void fetchSimplePokemonData(JsonArray jsonArray) {
         for (JsonObject pokemon : jsonArray.getValuesAs(JsonObject.class)) {
             URL_POKEDETAILS = pokemon.getString("url");
             String pokeDetails = template.getForObject(URL_POKEDETAILS, String.class);
@@ -50,7 +52,7 @@ public class PokeAPIService {
             JsonObject detailObj = jsonReader.readObject();
 
             // create pokemon obj
-            Pokemon pokeObj = new Pokemon();
+            SimplePokemon pokeObj = new SimplePokemon();
             // SET NAME
             pokeObj.setName(stringFormatter(detailObj.getString("name")));
             // System.out.println(pokeObj.getName()); //debug
@@ -58,53 +60,6 @@ public class PokeAPIService {
             // SET ID
             pokeObj.setId(detailObj.getInt("id"));
             // System.out.println(pokeObj.getId());
-
-            // SET ABILITY
-            JsonArray abilitiesArray = detailObj.getJsonArray("abilities"); // directly get the jsonarray from detailobj
-            for (JsonValue abilityValue : abilitiesArray) {
-                JsonObject abilityObject = (JsonObject) abilityValue;
-                JsonObject ability = abilityObject.getJsonObject("ability");
-                String abilityName = ability.getString("name");
-                pokeObj.setAbility(stringFormatter(abilityName));
-                // System.out.println(pokeObj.getAbility());
-            }
-
-            // SET MOVES
-            JsonArray movesArray = detailObj.getJsonArray("moves");
-            List<Move> movesList = new ArrayList<>();
-
-            for (JsonObject moveObject : movesArray.getValuesAs(JsonObject.class)) {
-                JsonObject move = moveObject.getJsonObject("move");
-
-                // retrieve move details
-                String moveName = move.getString("name");
-                String moveUrl = move.getString("url");
-
-                // fetch move details from moveUrl using http
-                String moveDetails = template.getForObject(moveUrl, String.class);
-                JsonReader moveJsonReader = Json.createReader(new StringReader(moveDetails));
-                JsonObject moveDetailObj = moveJsonReader.readObject();
-
-                Move pokemonMove = new Move();
-
-                pokemonMove.setPower(moveDetailObj.isNull("power") ? 0 : moveDetailObj.getInt("power"));
-                pokemonMove.setMoveName(stringFormatter(moveName));
-                pokemonMove.setPp(moveDetailObj.isNull("pp") ? 0 : moveDetailObj.getInt("pp"));
-                pokemonMove.setAccuracy(moveDetailObj.isNull("accuracy") ? 0 : moveDetailObj.getInt("accuracy"));
-
-                // retrieve "type" object
-                JsonObject typeObject = moveDetailObj.getJsonObject("type");
-
-                // retrieve "name" field from the "type" object
-                String typeName = typeObject.getString("name");
-                pokemonMove.setType(mapTypeFromJson(typeName));
-                // System.out.println(pokemonMove.getType());
-
-                // add PokemonMove to the list
-                movesList.add(pokemonMove);
-            }
-            // set the list of moves in the Pokemon object
-            pokeObj.setMoves(movesList);
 
             // SET IMAGE URL
             String frontDefaultSpriteUrl = detailObj.getJsonObject("sprites").getString("front_default");
@@ -127,40 +82,126 @@ public class PokeAPIService {
                     // System.out.println("type2: " + pokeObj.getType2());
                 }
             }
-
-            // SET STATS
-            JsonArray statsArray = detailObj.getJsonArray("stats");
-            for (int i = 0; i < statsArray.size(); i++) {
-                JsonObject statsObj = (JsonObject) statsArray.get(i);
-                int baseStat = statsObj.getInt("base_stat");
-
-                switch (i) {
-                    case 0:
-                        pokeObj.setBaseHP(baseStat);
-                        break;
-                    case 1:
-                        pokeObj.setBaseAtk(baseStat);
-                        break;
-                    case 2:
-                        pokeObj.setBaseDef(baseStat);
-                        break;
-                    case 3:
-                        pokeObj.setBaseSpA(baseStat);
-                        break;
-                    case 4:
-                        pokeObj.setBaseSpD(baseStat);
-                        break;
-                    case 5:
-                        pokeObj.setBaseSpe(baseStat);
-                        break;
-                    default:
-                }
-            }
             pokemonToShow.add(pokeObj);
         }
-        
-    }
 
+    }
+    
+    public Pokemon getOnePokemon(Integer id) {
+        String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ "+ id.toString(), String.class);
+        Reader reader = new StringReader(response);
+        JsonReader jsonReader = Json.createReader(reader);
+        JsonObject detailObj = jsonReader.readObject();
+        
+        // create pokemon obj
+        Pokemon pokeObj = new Pokemon();
+        // SET NAME
+        pokeObj.setName(stringFormatter(detailObj.getString("name")));
+        // System.out.println(pokeObj.getName()); //debug
+        
+        // SET ID
+        pokeObj.setId(detailObj.getInt("id"));
+        // System.out.println(pokeObj.getId());
+        
+        // SET ABILITY
+        JsonArray abilitiesArray = detailObj.getJsonArray("abilities"); // directly get the jsonarray from detailobj
+        for (JsonValue abilityValue : abilitiesArray) {
+            JsonObject abilityObject = (JsonObject) abilityValue;
+            JsonObject ability = abilityObject.getJsonObject("ability");
+            String abilityName = ability.getString("name");
+            pokeObj.setAbility(stringFormatter(abilityName));
+            // System.out.println(pokeObj.getAbility());
+        }
+        
+        // SET MOVES
+        JsonArray movesArray = detailObj.getJsonArray("moves");
+        List<Move> movesList = new ArrayList<>();
+        
+        for (JsonObject moveObject : movesArray.getValuesAs(JsonObject.class)) {
+            JsonObject move = moveObject.getJsonObject("move");
+            
+            // retrieve move details
+            String moveName = move.getString("name");
+            String moveUrl = move.getString("url");
+            
+            // fetch move details from moveUrl using http
+            String moveDetails = template.getForObject(moveUrl, String.class);
+            JsonReader moveJsonReader = Json.createReader(new StringReader(moveDetails));
+            JsonObject moveDetailObj = moveJsonReader.readObject();
+            
+            Move pokemonMove = new Move();
+            
+            pokemonMove.setPower(moveDetailObj.isNull("power") ? 0 : moveDetailObj.getInt("power"));
+            pokemonMove.setMoveName(stringFormatter(moveName));
+            pokemonMove.setPp(moveDetailObj.isNull("pp") ? 0 : moveDetailObj.getInt("pp"));
+            pokemonMove.setAccuracy(moveDetailObj.isNull("accuracy") ? 0 : moveDetailObj.getInt("accuracy"));
+            
+            // retrieve "type" object
+            JsonObject typeObject = moveDetailObj.getJsonObject("type");
+            
+            // retrieve "name" field from the "type" object
+            String typeName = typeObject.getString("name");
+            pokemonMove.setType(mapTypeFromJson(typeName));
+            // System.out.println(pokemonMove.getType());
+            
+            // add PokemonMove to the list
+            movesList.add(pokemonMove);
+        }
+        // set the list of moves in the Pokemon object
+        pokeObj.setMoves(movesList);
+        
+        // SET IMAGE URL
+        String frontDefaultSpriteUrl = detailObj.getJsonObject("sprites").getString("front_default");
+        pokeObj.setImageUrl(frontDefaultSpriteUrl);
+        // System.out.println(pokeObj.getImageUrl());
+        
+        // SET TYPE
+        JsonArray typesArray = detailObj.getJsonArray("types"); // directly get the jsonarray from detailobj
+        for (int i = 0; i < typesArray.size(); i++) {
+            JsonObject typeObj = (JsonObject) typesArray.get(i);
+            if (i == 0) {
+                JsonObject type = typeObj.getJsonObject("type");
+                String typeName = type.getString("name");
+                pokeObj.setType1(mapTypeFromJson(typeName));
+                // System.out.println("type1: " + pokeObj.getType1());
+            } else {
+                JsonObject type = typeObj.getJsonObject("type");
+                String typeName = type.getString("name");
+                pokeObj.setType2(mapTypeFromJson(typeName));
+                // System.out.println("type2: " + pokeObj.getType2());
+            }
+        }
+        
+        // SET STATS
+        JsonArray statsArray = detailObj.getJsonArray("stats");
+        for (int i = 0; i < statsArray.size(); i++) {
+            JsonObject statsObj = (JsonObject) statsArray.get(i);
+            int baseStat = statsObj.getInt("base_stat");
+            
+            switch (i) {
+                case 0:
+                pokeObj.setBaseHP(baseStat);
+                break;
+                case 1:
+                pokeObj.setBaseAtk(baseStat);
+                break;
+                case 2:
+                pokeObj.setBaseDef(baseStat);
+                break;
+                case 3:
+                pokeObj.setBaseSpA(baseStat);
+                break;
+                case 4:
+                pokeObj.setBaseSpD(baseStat);
+                break;
+                case 5:
+                pokeObj.setBaseSpe(baseStat);
+                break;
+                default:
+            }
+        }
+        return pokeObj;
+    }
     public static String stringFormatter(String input) {
         String[] words = input.split("-");
         StringBuilder formatted = new StringBuilder();
@@ -172,10 +213,10 @@ public class PokeAPIService {
         }
         return formatted.toString().trim();
     }
-
-    public PokemonType mapTypeFromJson(String typeJson) {
+    
+    public static PokemonType mapTypeFromJson(String typeJson) {
         typeJson = typeJson.toLowerCase();
-
+    
         switch (typeJson) {
             case "normal":
                 return PokemonType.NORMAL;
@@ -213,7 +254,7 @@ public class PokeAPIService {
                 return PokemonType.STEEL;
             case "fairy":
                 return PokemonType.FAIRY;
-
+    
             default:
                 throw new IllegalArgumentException("Invalid or unsupported Pokemon type: " + typeJson);
         }

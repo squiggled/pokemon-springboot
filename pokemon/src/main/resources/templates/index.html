@@ -1,51 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Pokédex</title>
-    <!-- Include Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/squared_pokemon_transparent.ico}" />
-</head>
-<body class="bg-gray-100">
-
-<div class="container mx-auto px-4">
-    <div class="py-5">
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      th:href="@{/squared_pokemon_transparent.ico}"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="py-5">
         <!-- Search Bar -->
         <div class="flex flex-wrap items-center justify-between">
-            <div class="max-w-lg w-full lg:max-w-xs">
-                <label for="search" class="sr-only">Search for Pokémon</label>
-                <div class="relative">
-                    <input type="text" id="search" class="block w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring-blue sm:text-sm"
-                           placeholder="Search for Pokémon" disabled>
-                </div>
+          <div class="max-w-lg w-full lg:max-w-xs">
+            <label for="search" class="sr-only">Search for Pokémon</label>
+            <div class="relative">
+              <input
+                type="text"
+                id="search"
+                class="block w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring-blue sm:text-sm"
+                placeholder="Search for Pokémon"
+              />
             </div>
-            <button class="ml-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled>
-                Search
-            </button>
+          </div>
+          <button
+            id="searchButton"
+            class="ml-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Search
+          </button>
         </div>
-    </div>
+      </div>
 
-    <!-- Pokémon Grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <!-- Pokémon Grid -->
+      <div
+        id="initialPokemonList"
+        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"
+      >
         <!-- Iterate over the first 20 Pokémon -->
-        <div th:each="pokemon, iterStat : ${pokemonList}" th:if="${iterStat.count <= 20}" class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
-            <img th:src="${pokemon.imageUrl}" alt="Pokémon Image" class="w-full">
+        <div
+          th:each="pokemon, iterStat : ${pokemonList}"
+          th:if="${iterStat.count <= 20}"
+          class="max-w-sm rounded overflow-hidden shadow-lg bg-white"
+        >
+          <a th:href="@{/pokemon/{id}(id=${pokemon.id})}" class="block">
+            <!-- Link to Pokémon detail page -->
+
+            <img
+              th:src="${pokemon.imageUrl}"
+              alt="Pokémon Image"
+              class="w-full"
+            />
             <div class="px-6 py-4">
-                <div class="font-bold text-xl mb-2" th:text="${pokemon.name}">Pokémon Name</div>
-                <p class="text-gray-700 text-base">
-                    HP: <span th:text="${pokemon.baseHP}">100</span><br>
-                    Attack: <span th:text="${pokemon.baseAtk}">100</span><br>
-                    Defense: <span th:text="${pokemon.baseDef}">100</span><br>
-                    Special Attack: <span th:text="${pokemon.baseSpA}">100</span><br>
-                    Special Defense: <span th:text="${pokemon.baseSpD}">100</span><br>
-                    Speed: <span th:text="${pokemon.baseSpe}">100</span>
-                </p>
+              <div class="font-bold text-xl mb-2" th:text="${pokemon.name}">
+                Name
+              </div>
             </div>
             <div class="px-6 pt-4 pb-2">
-                <span th:if="${pokemon.type1 != null}" 
-                  th:text="${pokemon.type1.name()}" 
-                  th:classappend="${'NORMAL'.equals(pokemon.type1.name()) ? 'bg-slate-200 text-black' :
+              <span
+                th:if="${pokemon.type1 != null}"
+                th:text="${pokemon.type1.name()}"
+                th:classappend="${'NORMAL'.equals(pokemon.type1.name()) ? 'bg-slate-200 text-black' :
                                     'FIRE'.equals(pokemon.type1.name()) ? 'bg-red-500 text-white ' :
                                    'WATER'.equals(pokemon.type1.name()) ? 'bg-blue-500 text-white ' :
                                    'ELECTRIC'.equals(pokemon.type1.name()) ? 'bg-yellow-400 text-white ' :
@@ -62,13 +80,15 @@
                                    'DRAGON'.equals(pokemon.type1.name()) ? 'bg-fuschia-500 text-white '  : 
                                    'DARK'.equals(pokemon.type1.name()) ? 'bg-gray-950 text-white ' :
                                    'STEEL'.equals(pokemon.type1.name()) ? 'bg-slate-400 text-white ' :
-                                   'FAIRY'.equals(pokemon.type1.name()) ? 'bg-pink-200 text-white ' : ''}" 
-                  class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                                   'FAIRY'.equals(pokemon.type1.name()) ? 'bg-pink-200 text-white ' : ''}"
+                class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+              >
                 Type 1
-            </span>
-            <span th:if="${pokemon.type2 != null}" 
-                  th:text="${pokemon.type2.name()}" 
-                  th:classappend="${'NORMAL'.equals(pokemon.type2.name()) ? 'bg-slate-200 text-black' :
+              </span>
+              <span
+                th:if="${pokemon.type2 != null}"
+                th:text="${pokemon.type2.name()}"
+                th:classappend="${'NORMAL'.equals(pokemon.type2.name()) ? 'bg-slate-200 text-black' :
                                     'FIRE'.equals(pokemon.type2.name()) ? 'bg-red-500 text-white ' :
                                    'WATER'.equals(pokemon.type2.name()) ? 'bg-blue-500 text-white ' :
                                    'ELECTRIC'.equals(pokemon.type2.name()) ? 'bg-yellow-400 text-white ' :
@@ -85,14 +105,22 @@
                                    'DRAGON'.equals(pokemon.type2.name()) ? 'bg-fuschia-500 text-white ' : 
                                    'DARK'.equals(pokemon.type2.name()) ? 'bg-gray-950 text-white ' :
                                    'STEEL'.equals(pokemon.type2.name()) ? 'bg-slate-400 text-white ' :
-                                   'FAIRY'.equals(pokemon.type2.name()) ? 'bg-pink-200 text-white ' : ''}" 
-                  class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2">
+                                   'FAIRY'.equals(pokemon.type2.name()) ? 'bg-pink-200 text-white ' : ''}"
+                class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+              >
                 Type 2
-            </span>
+              </span>
             </div>
+          </a>
         </div>
+      </div>
+      <div
+        id="searchResults"
+        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"
+      >
+        <!-- Search results will be appended here -->
+      </div>
     </div>
-</div>
-
-</body>
+    <script th:src="@{/js/search.js}"></script>
+  </body>
 </html>
