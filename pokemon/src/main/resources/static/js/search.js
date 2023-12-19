@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
         var query = searchInput.value;
 
         //perform request to SearchService backend 
-        fetch('/search?query=' + encodeURIComponent(query))
+        fetch('/search?query=' + encodeURIComponent(query)) //find a rest controller with the path /search
             .then(response => response.json()) //get response from service
             .then(data => {
-                //clear the initial Pokémon list
+                //clear the initial Pokémon list container
                 document.getElementById('initialPokemonList').innerHTML = '';
-                //update the page with the search results
+                //update the page with the search results in a diff container
                 updateSearchResults(data);
             })
             .catch(error => console.error('Error:', error));
@@ -42,13 +42,15 @@ function updateSearchResults(data) {
     data.forEach(function(pokemon) {
         var pokemonElement = document.createElement('div');
         pokemonElement.className = 'max-w-sm rounded overflow-hidden shadow-lg bg-white';
+        //data here CANNOT contain thymeleaf as th is only processed on server side, 
+        //th renders on server side, then it leaves n ghosts u forever :(
         pokemonElement.innerHTML = `
             <a href="/pokemon/${pokemon.id}" class="block"> <!-- Link to Pokémon detail page -->
                 <img src="${pokemon.imageUrl}" alt="Pokémon Image" class="w-full">
                 <div class="px-6 py-4">
                     <div class="font-bold text-xl mb-2">${pokemon.name}</div>
-                    <div>Type 1: ${pokemon.type1}</div>
-                    <div>Type 2: ${pokemon.type2}</div>
+                    <div>Type: ${pokemon.type1}</div>
+                    <div>Type: ${pokemon.type2}</div>
                 </div>
             </a>`;
         resultsContainer.appendChild(pokemonElement);

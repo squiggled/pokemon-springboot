@@ -1,57 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="'Pokédex - ' + ${pokemon.name}"></title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100" th:object="${pokemon}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/squared_pokemon_transparent.ico}" />
+  </head>
+  <body class="bg-gray-100" th:object="${pokemon}">
+    <div class="container mx-auto px-4 py-5">
+      <!-- Back Button -->
+      <div class="text-left mb-4">
+        <a
+          href="/"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >Back</a
+        >
+      </div>
 
-<div class="container mx-auto px-4 py-5">
-    <!-- Back Button -->
-    <div class="text-left mb-4">
-        <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</a>
-    </div>
-
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center">
-        <div class="bg-gray-200 text-gray-700 text-lg px-6 py-4" th:text="${pokemon.name}"></div>
-        
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center">
+        <div
+          class="bg-gray-200 text-gray-700 text-lg px-6 py-4"
+          th:text="${pokemon.name}"
+        ></div>
         <div class="py-4">
-            <img class="w-64 h-64 mx-auto" th:src="${pokemon.imageUrl}" alt="Pokémon Image">
+          <img
+            class="w-64 h-64 mx-auto"
+            th:src="${pokemon.imageUrl}"
+            alt="Pokémon Image"
+          />
+        </div>
+        <div
+          class="text-2xl font-semibold mb-4"
+          th:text="${pokemon.name}"
+        ></div>
+
+        <!-- Types -->
+        <div class="flex justify-center mb-4">
+          <span
+            th:if="${pokemon.type1 != null}"
+            th:text="*{type1}"
+            class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-4 mb-2"
+            th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(type1)}"
+          >
+          </span>
+          <span
+            th:if="${pokemon.type2 != null}"
+            th:text="*{type2}"
+            class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+            th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(type2)}"
+          >
+          </span>
         </div>
 
-        <div class="text-2xl font-semibold mb-4" th:text="*{name}"></div>
-        
         <div class="mb-4">
-            <span th:text="*{type1}"></span>
-            <span th:if="${type2}" th:text="*{type2}"></span>
-        </div>
-
-        <div class="mb-4" th:text="*{ability}"></div>
-
-        <div class="px-6 py-4">
-            <div class="font-bold text-xl mb-2">Stats</div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>HP: <span th:text="*{baseHP}"></span></div>
-                <div>Attack: <span th:text="*{baseAtk}"></span></div>
-                <div>Defense: <span th:text="*{baseDef}"></span></div>
-                <div>Special Attack: <span th:text="*{baseSpA}"></span></div>
-                <div>Special Defense: <span th:text="*{baseSpD}"></span></div>
-                <div>Speed: <span th:text="*{baseSpe}"></span></div>
-            </div>
+          Ability: <span th:text="${pokemon.ability}"></span>
         </div>
 
         <div class="px-6 py-4">
-            <div class="font-bold text-xl mb-2">Moves</div>
-            <ul>
-                <!-- Iterate over moves -->
-                <li th:each="move : *{moves}" th:text="${move.moveName} + ' - Power: ' + ${move.power}"></li>
-            </ul>
+          <div class="font-bold text-xl mb-2">Stats</div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>HP: <span th:text="*{baseHP}"></span></div>
+            <div>Attack: <span th:text="*{baseAtk}"></span></div>
+            <div>Defense: <span th:text="*{baseDef}"></span></div>
+            <div>Special Attack: <span th:text="*{baseSpA}"></span></div>
+            <div>Special Defense: <span th:text="*{baseSpD}"></span></div>
+            <div>Speed: <span th:text="*{baseSpe}"></span></div>
+          </div>
         </div>
+
+        <div class="px-6 py-4">
+          <div class="font-bold text-xl mb-2">Moves</div>
+          <table class="table-auto w-full">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-left">Move Name</th>
+                <th class="px-4 py-2 text-center">Type</th>
+                <th class="px-4 py-2 text-center">Accuracy</th>
+                <th class="px-4 py-2 text-center">PP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="move : ${pokemon.moves}">
+                <td
+                  class="border px-4 py-2 text-left"
+                  th:text="${move.moveName}"
+                ></td>
+                <td
+                  class="border px-4 py-2 text-center"
+                  th:text="${move.type}"
+                  th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(move.type)}"
+                ></td>
+                <td
+                  class="border px-4 py-2 text-center"
+                  th:text="${move.accuracy}"
+                ></td>
+                <td
+                  class="border px-4 py-2 text-center"
+                  th:text="${move.pp}"
+                ></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-</div>
-
-</body>
+  </body>
 </html>
-

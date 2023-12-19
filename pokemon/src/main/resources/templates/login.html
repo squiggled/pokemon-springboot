@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pokédex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      th:href="@{/squared_pokemon_transparent.ico}"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="py-5">
+        <!-- Navbar -->
+        <div class="flex justify-center items-center gap-4">
+          <!-- Left side - Login -->
+          <div class="flex gap-4">
+            <a th:href="@{/}" class="text-blue-500 hover:text-blue-700">Home</a>
+            <a th:href="@{/login}" class="text-blue-500 hover:text-blue-700">Login</a>
+          </div>
+
+          <!-- Central Search Bar -->
+          <div class="flex items-center">
+            <label for="search" class="sr-only">Search for Pokémon</label>
+            <div class="relative">
+              <input
+                type="text"
+                id="search"
+                class="block pl-7 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring-blue sm:text-sm"
+                placeholder="Search for Pokémon"
+              />
+            </div>
+            <button
+              id="searchButton"
+              class="ml-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Search
+            </button>
+          </div>
+
+          <!-- Right side - Other Links -->
+          <div class="flex gap-4">
+            <a href="#" class="text-blue-500 hover:text-blue-700">My Team</a>
+            <a href="#" class="text-blue-500 hover:text-blue-700">News</a>
+            <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
+          </div>
+        </div>
+
+       <!-- Login Form -->
+       <div class="flex justify-center items-center min-h-screen">
+        <div class="w-full max-w-xs">
+          <div th:if="${currentUser}" th:object="${currentUser}">
+              <h1 class="text-center text-2xl font-bold mb-4">Welcome, <span th:text="${currentUser}"></span></h1>
+          </div>
+          <div th:unless="${currentUser}">
+            <form method="post" th:action="@{/login}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+              <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="login">
+                  Enter your name:
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="login" placeholder="Username">
+              </div>
+              <div class="flex items-center justify-center">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                  Build my team!
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+        
+      </div>
+    </div>
+  </body>
+</html>
