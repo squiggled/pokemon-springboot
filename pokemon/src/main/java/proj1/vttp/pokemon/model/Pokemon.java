@@ -1,12 +1,9 @@
 package proj1.vttp.pokemon.model;
 
-import java.util.List;
-
 public class Pokemon {
     private String name;
     private Integer id;
     private String ability;
-    private List<Move> moves;
     private PokemonType type1;
     private PokemonType type2 = null;
     private String imageUrl;
@@ -19,13 +16,12 @@ public class Pokemon {
 
     public Pokemon() { }
 
-    public Pokemon(String name, Integer id, String ability, List<Move> moves, PokemonType type1, PokemonType type2,
+    public Pokemon(String name, Integer id, String ability, PokemonType type1, PokemonType type2,
             String imageUrl, Integer baseHP, Integer baseAtk, Integer baseDef, Integer baseSpA, Integer baseSpD,
             Integer baseSpe) {
         this.name = name;
         this.id = id;
         this.ability = ability;
-        this.moves = moves;
         this.type1 = type1;
         this.type2 = type2;
         this.imageUrl = imageUrl;
@@ -59,14 +55,6 @@ public class Pokemon {
 
     public void setAbility(String ability) {
         this.ability = ability;
-    }
-
-    public List<Move> getMoves() {
-        return moves;
-    }
-
-    public void setMoves(List<Move> moves) {
-        this.moves = moves;
     }
 
     public PokemonType getType1() {
@@ -147,7 +135,6 @@ public class Pokemon {
         sb.append("Pokemon{");
         sb.append("id=").append(id);
         sb.append(", ability='").append(ability).append('\'');
-        sb.append(", moves=").append(moves);
         sb.append(", type1=").append(type1);
         sb.append(", type2=").append(type2);
         sb.append(", imageUrl='").append(imageUrl).append('\'');

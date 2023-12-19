@@ -71,38 +71,28 @@
 
         <div class="px-6 py-4">
           <div class="font-bold text-xl mb-2">Moves</div>
-          <table class="table-auto w-full">
+          <button id="loadMovesBtn" 
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+          th:data-pokemon-id="${pokemon.id}">
+            Load Moves
+          </button>
+          <div id="movesContainer"></div>
+          <table id="movesTable" class="table-auto w-full mt-4 hidden">
             <thead>
-              <tr>
-                <th class="px-4 py-2 text-left">Move Name</th>
-                <th class="px-4 py-2 text-center">Type</th>
-                <th class="px-4 py-2 text-center">Accuracy</th>
-                <th class="px-4 py-2 text-center">PP</th>
-              </tr>
+                <tr>
+                    <th class="px-4 py-2 text-left">Move Name</th>
+                    <th class="px-4 py-2 text-center">Type</th>
+                    <th class="px-4 py-2 text-center">Power</th>
+                    <th class="px-4 py-2 text-center">Accuracy</th>
+                    <th class="px-4 py-2 text-center">PP</th>
+                </tr>
             </thead>
-            <tbody>
-              <tr th:each="move : ${pokemon.moves}">
-                <td
-                  class="border px-4 py-2 text-left"
-                  th:text="${move.moveName}"
-                ></td>
-                <td
-                  class="border px-4 py-2 text-center"
-                  th:text="${move.type}"
-                  th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(move.type)}"
-                ></td>
-                <td
-                  class="border px-4 py-2 text-center"
-                  th:text="${move.accuracy}"
-                ></td>
-                <td
-                  class="border px-4 py-2 text-center"
-                  th:text="${move.pp}"
-                ></td>
-              </tr>
+            <tbody id="movesTableBody">
+                <!-- rows will be added here -->
             </tbody>
-          </table>
+        </table>
         </div>
+        <script th:src="@{/js/loadMoves.js}"></script>
       </div>
     </div>
   </body>

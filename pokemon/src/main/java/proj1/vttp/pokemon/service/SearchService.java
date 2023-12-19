@@ -4,6 +4,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import proj1.vttp.pokemon.model.SimplePokemon;
 
 @Service
 public class SearchService {
+    private Logger logger = Logger.getLogger(SearchService.class.getName()); 
 
     private List<String> allPokemonNames = new ArrayList<>();
     private List<SimplePokemon> foundPokemon = new ArrayList<>();
@@ -41,7 +44,7 @@ public class SearchService {
     }
 
     public List<SimplePokemon> searchPokemon(String query) {
-        System.out.println("searching for " + query);
+        logger.log(Level.INFO, "🟢 Searching for %s ".formatted(query));
         return allPokemonNames.stream()
                 .filter(name -> name.toLowerCase().contains(query.toLowerCase()))
                 .map(this::getPokemonDetails)

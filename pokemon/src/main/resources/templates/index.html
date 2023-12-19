@@ -4,70 +4,107 @@
     <meta charset="UTF-8" />
     <title>Pokédex</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/squared_pokemon_transparent.ico}" />
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      th:href="@{/squared_pokemon_transparent.ico}"
+    />
   </head>
   <body class="bg-gray-100">
     <div class="container mx-auto px-4">
       <div class="py-5">
-      <!-- Navbar -->
-      <div class="flex justify-center items-center gap-4">
-        <!-- Left side - Login -->
-        <div class="flex gap-4">
-          <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
-          <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
-        </div>
-
-        <!-- Central Search Bar -->
-        <div class="flex items-center">
-          <label for="search" class="sr-only">Search for Pokémon</label>
-          <div class="relative">
-            <input
-              type="text"
-              id="search"
-              class="block pl-7 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring-blue sm:text-sm"
-              placeholder="Search for Pokémon"
-            />
+        <!-- nav -->
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <!--login and home -->
+          <div class="flex gap-4 mb-4 md:mb-0">
+            <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
+            <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
           </div>
-          <button
-            id="searchButton"
-            class="ml-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Search
-          </button>
+
+          <!-- other links -->
+          <div class="flex gap-4 mb-4 md:mb-0">
+            <a href="/party" class="text-blue-500 hover:text-blue-700">My Team</a>
+            <a href="#" class="text-blue-500 hover:text-blue-700">News</a>
+            <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
+          </div>
         </div>
 
-        <!-- Right side - Other Links -->
-        <div class="flex gap-4">
-          <a href="#" class="text-blue-500 hover:text-blue-700">My Team</a>
-          <a href="#" class="text-blue-500 hover:text-blue-700">News</a>
-          <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
+        <!--search -->
+        <div class="flex justify-center">
+          <div class="flex items-center">
+            <label for="search" class="sr-only">Search for Pokémon</label>
+            <div class="relative">
+              <input
+                type="text"
+                id="search"
+                class="block pl-7 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:ring-blue sm:text-sm"
+                placeholder="Search for Pokémon"
+              />
+            </div>
+            <button
+              id="searchButton"
+              class="ml-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
-      </div>
 
-      <!-- Pokémon Grid -->
-      <div id="initialPokemonList" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        <!-- Iterate over the first 20 Pokémon -->
-        <div th:each="pokemon, iterStat : ${pokemonList}" th:if="${iterStat.count <= 20}" class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
+      <!--pokemon grid -->
+      <div
+        id="initialPokemonList"
+        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"
+      >
+        <!--iterate over the first 20 Pokémon -->
+        <div
+          th:each="pokemon, iterStat : ${pokemonList}"
+          th:if="${iterStat.count <= 20}"
+          class="max-w-sm rounded overflow-hidden shadow-lg bg-white"
+        >
           <a th:href="@{/pokemon/{id}(id=${pokemon.id})}" class="block">
-            <!-- Link to Pokémon detail page -->
-            <img th:src="${pokemon.imageUrl}" alt="Pokémon Image" class="w-full" />
+            <!--link to Pokémon detail page -->
+            <img
+              th:src="${pokemon.imageUrl}"
+              alt="Pokémon Image"
+              class="w-full"
+            />
             <div class="px-6 py-4">
-              <div class="font-bold text-xl mb-2" th:text="${pokemon.name}">Name</div>
+              <div class="font-bold text-xl mb-2" th:text="${pokemon.name}">
+                Name
+              </div>
             </div>
             <div class="px-6 pt-4 pb-2">
-              <span th:if="${pokemon.type1 != null}" th:text="${pokemon.type1.name()}"
-                    class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
-                    th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type1)}"></span>
-              <span th:if="${pokemon.type2 != null}" th:text="${pokemon.type2.name()}"
-                    class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
-                    th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type2)}"></span>
+              <span
+                th:if="${pokemon.type1 != null}"
+                th:text="${pokemon.type1.name()}"
+                class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+                th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type1)}"
+              ></span>
+              <span
+                th:if="${pokemon.type2 != null}"
+                th:text="${pokemon.type2.name()}"
+                class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+                th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type2)}"
+              ></span>
             </div>
           </a>
+          <form th:action="@{/addToTeam}" method="post">
+            <input type="hidden" th:name="pokemonId" th:value="${pokemon.id}" />
+            <button
+              type="submit"
+              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-4"
+            >
+              Add
+            </button>
+          </form>
         </div>
       </div>
-      <div id="searchResults" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        <!-- Search results will be appended here -->
+      <div
+        id="searchResults"
+        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"
+      >
+        <!-- search results will be added here -->
       </div>
     </div>
     <script th:src="@{/js/search.js}"></script>

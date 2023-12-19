@@ -5,6 +5,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +16,7 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
-import proj1.vttp.pokemon.model.Move;
+import proj1.vttp.pokemon.controller.PokedexController;
 import proj1.vttp.pokemon.model.Pokemon;
 import proj1.vttp.pokemon.model.PokemonType;
 import proj1.vttp.pokemon.model.SimplePokemon;
@@ -22,6 +24,8 @@ import proj1.vttp.pokemon.model.SimplePokemon;
 //for fetching data from external API
 @Service
 public class PokeAPIService {
+
+    private Logger logger = Logger.getLogger(PokeAPIService.class.getName());
 
     String URL_POKEDETAILS = "https://pokeapi.co/api/v2/pokemon/";
 
@@ -86,23 +90,23 @@ public class PokeAPIService {
         }
 
     }
-    
+
     public Pokemon getOnePokemon(Integer id) {
-        String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ "+ id.toString(), String.class);
+        String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + id.toString(), String.class);
         Reader reader = new StringReader(response);
         JsonReader jsonReader = Json.createReader(reader);
         JsonObject detailObj = jsonReader.readObject();
-        
+
         // create pokemon obj
         Pokemon pokeObj = new Pokemon();
         // SET NAME
         pokeObj.setName(stringFormatter(detailObj.getString("name")));
         // System.out.println(pokeObj.getName()); //debug
-        
+
         // SET ID
         pokeObj.setId(detailObj.getInt("id"));
         // System.out.println(pokeObj.getId());
-        
+
         // SET ABILITY
         JsonArray abilitiesArray = detailObj.getJsonArray("abilities"); // directly get the jsonarray from detailobj
         for (JsonValue abilityValue : abilitiesArray) {
@@ -112,49 +116,12 @@ public class PokeAPIService {
             pokeObj.setAbility(stringFormatter(abilityName));
             // System.out.println(pokeObj.getAbility());
         }
-        
-        // SET MOVES
-        JsonArray movesArray = detailObj.getJsonArray("moves");
-        List<Move> movesList = new ArrayList<>();
-        
-        for (JsonObject moveObject : movesArray.getValuesAs(JsonObject.class)) {
-            JsonObject move = moveObject.getJsonObject("move");
-            
-            // retrieve move details
-            String moveName = move.getString("name");
-            String moveUrl = move.getString("url");
-            
-            // fetch move details from moveUrl using http
-            String moveDetails = template.getForObject(moveUrl, String.class);
-            JsonReader moveJsonReader = Json.createReader(new StringReader(moveDetails));
-            JsonObject moveDetailObj = moveJsonReader.readObject();
-            
-            Move pokemonMove = new Move();
-            
-            pokemonMove.setPower(moveDetailObj.isNull("power") ? 0 : moveDetailObj.getInt("power"));
-            pokemonMove.setMoveName(stringFormatter(moveName));
-            pokemonMove.setPp(moveDetailObj.isNull("pp") ? 0 : moveDetailObj.getInt("pp"));
-            pokemonMove.setAccuracy(moveDetailObj.isNull("accuracy") ? 0 : moveDetailObj.getInt("accuracy"));
-            
-            // retrieve "type" object
-            JsonObject typeObject = moveDetailObj.getJsonObject("type");
-            
-            // retrieve "name" field from the "type" object
-            String typeName = typeObject.getString("name");
-            pokemonMove.setType(mapTypeFromJson(typeName));
-            // System.out.println(pokemonMove.getType());
-            
-            // add PokemonMove to the list
-            movesList.add(pokemonMove);
-        }
-        // set the list of moves in the Pokemon object
-        pokeObj.setMoves(movesList);
-        
+
         // SET IMAGE URL
         String frontDefaultSpriteUrl = detailObj.getJsonObject("sprites").getString("front_default");
         pokeObj.setImageUrl(frontDefaultSpriteUrl);
         // System.out.println(pokeObj.getImageUrl());
-        
+
         // SET TYPE
         JsonArray typesArray = detailObj.getJsonArray("types"); // directly get the jsonarray from detailobj
         for (int i = 0; i < typesArray.size(); i++) {
@@ -171,37 +138,74 @@ public class PokeAPIService {
                 // System.out.println("type2: " + pokeObj.getType2());
             }
         }
-        
+
         // SET STATS
         JsonArray statsArray = detailObj.getJsonArray("stats");
         for (int i = 0; i < statsArray.size(); i++) {
             JsonObject statsObj = (JsonObject) statsArray.get(i);
             int baseStat = statsObj.getInt("base_stat");
-            
+
             switch (i) {
                 case 0:
-                pokeObj.setBaseHP(baseStat);
-                break;
+                    pokeObj.setBaseHP(baseStat);
+                    break;
                 case 1:
-                pokeObj.setBaseAtk(baseStat);
-                break;
+                    pokeObj.setBaseAtk(baseStat);
+                    break;
                 case 2:
-                pokeObj.setBaseDef(baseStat);
-                break;
+                    pokeObj.setBaseDef(baseStat);
+                    break;
                 case 3:
-                pokeObj.setBaseSpA(baseStat);
-                break;
+                    pokeObj.setBaseSpA(baseStat);
+                    break;
                 case 4:
-                pokeObj.setBaseSpD(baseStat);
-                break;
+                    pokeObj.setBaseSpD(baseStat);
+                    break;
                 case 5:
-                pokeObj.setBaseSpe(baseStat);
-                break;
+                    pokeObj.setBaseSpe(baseStat);
+                    break;
                 default:
             }
         }
         return pokeObj;
     }
+
+    public List<String> getMoves(Integer pokemonId) {
+        String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + pokemonId.toString(),
+                String.class);
+        Reader reader = new StringReader(response);
+        JsonReader jsonReader = Json.createReader(reader);
+        JsonObject detailObj = jsonReader.readObject();
+        JsonArray movesArray = detailObj.getJsonArray("moves");
+
+        List<String> movesList = new ArrayList<>();
+        for (JsonObject obj : movesArray.getValuesAs(JsonObject.class)) {
+            JsonObject moveObj = obj.getJsonObject("move");
+            String moveName = moveObj.getString("name");
+            String moveUrl = moveObj.getString("url");
+
+            // fetch more details from the move URL
+            String moveResponse = template.getForObject(moveUrl, String.class);
+            Reader moveReader = new StringReader(moveResponse);
+            JsonReader moveJsonReader = Json.createReader(moveReader);
+            JsonObject moveDetailObj = moveJsonReader.readObject();
+            Integer movePower = moveDetailObj.getInt("power", 0);
+            Integer moveAcc = moveDetailObj.getInt("accuracy", 0);
+            Integer movePp = moveDetailObj.getInt("pp", 0);
+
+            JsonObject typeObject = moveDetailObj.getJsonObject("type");
+            // retrieve "name" field from the "type" object
+            String typeName = typeObject.getString("name");
+            PokemonType moveType = mapTypeFromJson(typeName);
+
+
+            String moveDetails = moveName + "," + moveType + "," + movePower + ","+ moveAcc + "," + movePp;
+            logger.log(Level.INFO, "🟢 Move added %s".formatted(moveDetails));
+            movesList.add(moveDetails);
+        }
+        return movesList;
+    }
+
     public static String stringFormatter(String input) {
         String[] words = input.split("-");
         StringBuilder formatted = new StringBuilder();
@@ -213,10 +217,10 @@ public class PokeAPIService {
         }
         return formatted.toString().trim();
     }
-    
+
     public static PokemonType mapTypeFromJson(String typeJson) {
         typeJson = typeJson.toLowerCase();
-    
+
         switch (typeJson) {
             case "normal":
                 return PokemonType.NORMAL;
@@ -254,7 +258,7 @@ public class PokeAPIService {
                 return PokemonType.STEEL;
             case "fairy":
                 return PokemonType.FAIRY;
-    
+
             default:
                 throw new IllegalArgumentException("Invalid or unsupported Pokemon type: " + typeJson);
         }
