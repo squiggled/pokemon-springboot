@@ -16,7 +16,6 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
-import proj1.vttp.pokemon.controller.PokedexController;
 import proj1.vttp.pokemon.model.Pokemon;
 import proj1.vttp.pokemon.model.PokemonType;
 import proj1.vttp.pokemon.model.SimplePokemon;
@@ -199,7 +198,7 @@ public class PokeAPIService {
             PokemonType moveType = mapTypeFromJson(typeName);
 
 
-            String moveDetails = moveName + "," + moveType + "," + movePower + ","+ moveAcc + "," + movePp;
+            String moveDetails = stringFormatter(moveName) + "," + moveType + "," + movePower + ","+ moveAcc + "," + movePp;
             logger.log(Level.INFO, "🟢 Move added %s".formatted(moveDetails));
             movesList.add(moveDetails);
         }

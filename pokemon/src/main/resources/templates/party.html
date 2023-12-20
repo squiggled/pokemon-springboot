@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Pokédex</title>
+    <title>My Party</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="shortcut icon"
@@ -23,17 +23,89 @@
 
           <!-- other links -->
           <div class="flex gap-4 mb-4 md:mb-0">
-            <a href="/party" class="text-blue-500 hover:text-blue-700">My Team</a>
+            <a href="/party" class="text-blue-500 hover:text-blue-700"
+              >My Team</a
+            >
             <a href="#" class="text-blue-500 hover:text-blue-700">News</a>
             <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
           </div>
         </div>
       </div>
     </div>
-    <div>
-        <form method="post" th:action="@{/party}">
-            <button type="submit">Save party</button>
-        </form>
+    <div th:if="${party}">
+      <div th:object="${party}">
+        <div class="flex justify-center">
+          <!-- party grid -->
+          <div
+            id="partyPokemonList"
+            class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
+          >
+          <div th:each="pokemon : ${party}" class="relative max-w-xl rounded overflow-hidden shadow-lg bg-white">
+            <!-- Delete button -->
+            <form th:action="@{/party/delete}" method="post" class="absolute top-0 right-0">
+              <input type="hidden" th:name="pokemonId" th:value="${pokemon.id}" />
+              <button type="submit" class="bg-red-500 hover:bg-red-700 text-white rounded-full h-8 w-8 flex items-center justify-center text-sm">
+                X
+              </button>
+            </form>
+              <img
+                th:src="${pokemon.imageUrl}"
+                alt="Pokémon Image"
+                class="h-40"
+              />
+              <div class="px-12 py-6">
+                <div
+                  class="font-bold text-xl mb-2"
+                  th:text="${pokemon.name}"
+                ></div>
+                <div>
+                  <span
+                    th:if="${pokemon.type1 != null}"
+                    th:text="${pokemon.type1.name()}"
+                    class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+                    th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type1)}"
+                  ></span>
+                  <span
+                    th:if="${pokemon.type2 != null}"
+                    th:text="${pokemon.type2.name()}"
+                    class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
+                    th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type2)}"
+                  ></span>
+                </div>
+                <div>
+                  <!-- stats -->
+                  <p>HP: <span th:text="${pokemon.baseHP}"></span></p>
+                  <p>Attack: <span th:text="${pokemon.baseAtk}"></span></p>
+                  <p>Defence: <span th:text="${pokemon.baseDef}"></span></p>
+                  <p>Sp. Attack: <span th:text="${pokemon.baseSpA}"></span></p>
+                  <p>Sp. Defence: <span th:text="${pokemon.baseSpD}"></span></p>
+                  <p>Speed: <span th:text="${pokemon.baseSpe}"></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- save party form -->
+        <div class="text-center py-5">
+          <form method="post" th:action="@{/party}">
+            <button
+              type="submit"
+              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Save Party
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="h-screen flex flex-col justify-center items-center" th:unless="${party}">
+        <h1 class="text-xl font-semibold text-center">Your party is empty :( </h1>
+        <h1 class="text-xl font-semibold text-center">
+            Click 
+            <a href="/" class="text-blue-500 hover:text-blue-700">here</a>
+            to start building your team
+        </h1>   
     </div>
   </body>
 </html>

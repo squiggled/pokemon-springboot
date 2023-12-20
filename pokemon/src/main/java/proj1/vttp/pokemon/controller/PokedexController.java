@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
+import proj1.vttp.pokemon.model.Party;
 import proj1.vttp.pokemon.model.Pokemon;
 import proj1.vttp.pokemon.model.SimplePokemon;
 import proj1.vttp.pokemon.service.PokeAPIService;
@@ -105,10 +106,13 @@ public class PokedexController {
 
     //load party page
     @GetMapping("/party")
-    public String party(){
+    public String party(Model model, HttpSession session){
+        List<Party> party = (List<Party>) session.getAttribute(UserUtils.USER_PARTY);
+        model.addAttribute("party", party);
         return "party";
     }
 
+    //save party to database
     @PostMapping("/party")
     public String saveParty(HttpSession session){
         List<Pokemon> party = (List<Pokemon>) session.getAttribute(UserUtils.USER_PARTY);
@@ -116,6 +120,16 @@ public class PokedexController {
         userService.save(party, username);
         return "redirect:/";
 
+    }
+    //delete pokemon from party
+    @PostMapping("/party/delete")
+    public String deletePokemon(@RequestParam("pokemonId") Integer pokemonId, HttpSession session){
+        List<Pokemon> currentParty = (List<Pokemon>) session.getAttribute(UserUtils.USER_PARTY);
+        if (currentParty != null) {
+            currentParty.removeIf(pokemon -> pokemon.getId().equals(pokemonId));
+            session.setAttribute(UserUtils.USER_PARTY, currentParty);
+        }
+        return "redirect:/party";
     }
 
     

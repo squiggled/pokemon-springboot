@@ -1,6 +1,5 @@
 package proj1.vttp.pokemon.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import proj1.vttp.pokemon.service.PokeAPIService;
 
 @RestController
 public class MovesController {
+
     @Autowired
     PokeAPIService pokeAPIService;
 

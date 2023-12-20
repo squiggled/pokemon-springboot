@@ -1,10 +1,3 @@
-//format move names from kebab-case to Title Case
-function formatMoveName(moveName) {
-    return moveName
-        .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-}
 
 //load moves and update the table
 function loadMoves(pokemonId) {
@@ -15,9 +8,9 @@ function loadMoves(pokemonId) {
             movesTableBody.innerHTML = ''; 
             movesList.forEach(moveStr => {
                 var moveDetails = moveStr.split(',');
-                var formattedMoveName = formatMoveName(moveDetails[0]);
+                var moveName = (moveDetails[0]);
                 var row = `<tr>
-                    <td class="border px-4 py-2">${formattedMoveName}</td>
+                    <td class="border px-4 py-2">${moveName}</td>
                     <td class="border px-4 py-2">${moveDetails[1]}</td>
                     <td class="border px-4 py-2">${moveDetails[2]}</td>
                     <td class="border px-4 py-2">${moveDetails[3]}</td>
