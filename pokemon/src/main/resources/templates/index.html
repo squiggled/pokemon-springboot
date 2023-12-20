@@ -18,12 +18,13 @@
           <!--login and home -->
           <div class="flex gap-4 mb-4 md:mb-0">
             <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
-            <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
+            <a href="/party" class="text-blue-500 hover:text-blue-700">My Team</a>
+            
           </div>
 
           <!-- other links -->
           <div class="flex gap-4 mb-4 md:mb-0">
-            <a href="/party" class="text-blue-500 hover:text-blue-700">My Team</a>
+            <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
             <a href="#" class="text-blue-500 hover:text-blue-700">News</a>
             <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
           </div>
@@ -60,7 +61,7 @@
         <div
           th:each="pokemon, iterStat : ${pokemonList}"
           th:if="${iterStat.count <= 20}"
-          class="max-w-sm rounded overflow-hidden shadow-lg bg-white"
+          class="max-w-sm rounded overflow-hidden shadow-lg bg-white pokemon-item"
         >
           <a th:href="@{/pokemon/{id}(id=${pokemon.id})}" class="block">
             <!--link to Pokémon detail page -->
@@ -107,6 +108,12 @@
         <!-- search results will be added here -->
       </div>
     </div>
+    <div class="flex justify-center pt-4 pb-8">
+      <button id="loadMoreButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Load More
+      </button>
+    </div>
+    
     <script th:src="@{/js/search.js}"></script>
   </body>
 </html>

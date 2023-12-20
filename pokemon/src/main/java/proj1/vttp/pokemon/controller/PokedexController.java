@@ -1,20 +1,17 @@
 package proj1.vttp.pokemon.controller;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import proj1.vttp.pokemon.model.Party;
@@ -35,7 +32,7 @@ public class PokedexController {
     @Autowired
     UserService userService;
 
-    //LOAD POKEMON PAGE
+    // LOAD POKEMON PAGE
     // get landing page
     @GetMapping("/")
     public String intialLoad(Model model) {
@@ -84,7 +81,7 @@ public class PokedexController {
         return "redirect:/login";
     }
 
-    // PARTY ADDING
+    // PARTY
     // add to party
     @PostMapping("/addToTeam")
     public String addToTeam(@RequestParam("pokemonId") Integer pokemonId, HttpSession session) {
@@ -104,26 +101,26 @@ public class PokedexController {
         return "redirect:/";
     }
 
-    //load party page
+    // load party page
     @GetMapping("/party")
-    public String party(Model model, HttpSession session){
+    public String party(Model model, HttpSession session) {
         List<Party> party = (List<Party>) session.getAttribute(UserUtils.USER_PARTY);
         model.addAttribute("party", party);
         return "party";
     }
 
-    //save party to database
+    // save party to database
     @PostMapping("/party")
-    public String saveParty(HttpSession session){
+    public String saveParty(HttpSession session) {
         List<Pokemon> party = (List<Pokemon>) session.getAttribute(UserUtils.USER_PARTY);
         String username = (String) session.getAttribute(UserUtils.USER_SESSION);
         userService.save(party, username);
         return "redirect:/";
-
     }
-    //delete pokemon from party
+
+    // delete pokemon from party
     @PostMapping("/party/delete")
-    public String deletePokemon(@RequestParam("pokemonId") Integer pokemonId, HttpSession session){
+    public String deletePokemon(@RequestParam("pokemonId") Integer pokemonId, HttpSession session) {
         List<Pokemon> currentParty = (List<Pokemon>) session.getAttribute(UserUtils.USER_PARTY);
         if (currentParty != null) {
             currentParty.removeIf(pokemon -> pokemon.getId().equals(pokemonId));
@@ -131,7 +128,5 @@ public class PokedexController {
         }
         return "redirect:/party";
     }
-
-    
 
 }

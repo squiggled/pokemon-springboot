@@ -46,7 +46,23 @@ public class PokeAPIService {
         fetchSimplePokemonData(innerArray);
     }
 
-    public void fetchSimplePokemonData(JsonArray jsonArray) {
+    //for loading 20 more pokemon
+    public List<SimplePokemon> load20More(Integer offset){
+        String URL_LOADMORE = "https://pokeapi.co/api/v2/pokemon/?offset="+offset+"&limit=20";
+        System.out.println("offset:" +offset);
+        String response = template.getForObject(URL_LOADMORE, String.class);
+        Reader reader = new StringReader(response);
+        JsonReader jsonReader = Json.createReader(reader);
+        JsonObject outerObj = jsonReader.readObject();
+
+        JsonArray innerArray = outerObj.getJsonArray("results");
+
+        return fetchSimplePokemonData(innerArray);
+    }
+
+    //fetch simpler pokemon obj for load
+    public List<SimplePokemon> fetchSimplePokemonData(JsonArray jsonArray) {
+        pokemonToShow = new LinkedList<>(); //RESET the list in case we are loading 20 more pokemon
         for (JsonObject pokemon : jsonArray.getValuesAs(JsonObject.class)) {
             URL_POKEDETAILS = pokemon.getString("url");
             String pokeDetails = template.getForObject(URL_POKEDETAILS, String.class);
@@ -87,9 +103,10 @@ public class PokeAPIService {
             }
             pokemonToShow.add(pokeObj);
         }
-
+        return pokemonToShow;
     }
 
+    //return 1 full Pokemon object
     public Pokemon getOnePokemon(Integer id) {
         String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + id.toString(), String.class);
         Reader reader = new StringReader(response);
@@ -169,6 +186,7 @@ public class PokeAPIService {
         return pokeObj;
     }
 
+    //get moves
     public List<String> getMoves(Integer pokemonId) {
         String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + pokemonId.toString(),
                 String.class);
@@ -199,12 +217,13 @@ public class PokeAPIService {
 
 
             String moveDetails = stringFormatter(moveName) + "," + moveType + "," + movePower + ","+ moveAcc + "," + movePp;
-            logger.log(Level.INFO, "🟢 Move added %s".formatted(moveDetails));
+            logger.log(Level.INFO, "🟢 Move added to table %s".formatted(moveDetails));
             movesList.add(moveDetails);
         }
         return movesList;
     }
 
+    
     public static String stringFormatter(String input) {
         String[] words = input.split("-");
         StringBuilder formatted = new StringBuilder();
