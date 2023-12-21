@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pokédex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      th:href="@{/squared_pokemon_transparent.ico}"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="py-5">
+        <!-- nav -->
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <!--login and home -->
+          <div class="flex gap-4 mb-4 md:mb-0">
+            <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
+            <a href="/party" class="text-blue-500 hover:text-blue-700"
+              >My Team</a
+            >
+          </div>
+
+          <!-- other links -->
+          <div class="flex gap-4 mb-4 md:mb-0">
+            <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
+            <a href="/news" class="text-blue-500 hover:text-blue-700">News</a>
+            <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
+          </div>
+        </div>
+        <!--end nav -->
+        <article class="flex flex-col md:flex-row mb-4 mt-4 bg-white shadow-lg rounded-lg overflow-hidden max-w-5xl mx-auto" th:each="article : ${newsList}">
+          <!-- <div class="container mx-auto px-4"> -->
+            <div>
+              <img class="h-auto max-w-md m-4" th:src="@{${article.imageUrl}}" />
+            </div>
+            <div class="p-4 w-full flex flex-col justify-between">
+                <!--above: make the div take the full width of the card(w-full) + arrange children w space between (justify between)-->
+              <p  th:text="${article.title}" class="text-2xl font-bold"></p>
+
+              <p class="mt-2 text-gray-600" th:text="${article.description}"></p>
+
+              <a
+                class="text-blue-500 self-end hover:text-blue-700 mt-4"
+                th:href="@{${article.articleUrl}}"
+                th:text="'Link to full article'"
+              ></a>
+              <!-- include 'link to full article' inside singular quotation to indicate its a string -->
+            </div>
+        </article>
+      </div>
+    </div>
+  </body>
+</html>

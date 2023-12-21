@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var loadMovesBtn = document.getElementById('loadMovesBtn');
     if (loadMovesBtn) {
         loadMovesBtn.addEventListener('click', function() {
-            var pokemonId = this.getAttribute('data-pokemon-id');
+            var pokemonId = this.getAttribute('data-pokemon-id'); //add attribute data-pokemon-id in the thymeleaf html to retrieve it here
             loadMoves(pokemonId);
         });
     }

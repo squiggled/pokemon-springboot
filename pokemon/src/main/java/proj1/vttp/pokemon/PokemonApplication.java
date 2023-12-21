@@ -25,7 +25,6 @@ public class PokemonApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		String response = template.getForObject(URL_INITIALLOAD, String.class);
-
 		pokeAPIService.storeInitialLoad(response);
 	}
 

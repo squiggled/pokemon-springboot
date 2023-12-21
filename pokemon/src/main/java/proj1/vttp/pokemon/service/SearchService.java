@@ -24,7 +24,7 @@ public class SearchService {
 
     private List<String> allPokemonNames = new ArrayList<>();
     private List<SimplePokemon> foundPokemon = new ArrayList<>();
-    private String URL_ALLPOKEMON = "https://pokeapi.co/api/v2/pokemon?limit=1017";
+    private String URL_ALLPOKEMON = "https://pokeapi.co/api/v2/pokemon?limit=1017"; //get all the pokemon
     private String URL_POKEDETAILS = "https://pokeapi.co/api/v2/pokemon/";
     RestTemplate template = new RestTemplate();
 
