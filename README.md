@@ -4,14 +4,16 @@
 This project is a Pokédex web application. It allows users to browse through Pokémon and their stats, abilities, and movesets. The search functionality allows you to search by Pokemon or move. 
 
 ## Features
-- Display a grid of the first 20 Pokémon.
-- Show detailed information for each Pokémon, including stats, abilities, and moves.
-- Modern, responsive web design using Tailwind CSS.
-- Planned search functionality to filter Pokémon by name or attributes.
+- PokeDex features for all 1025 Pokémon.
+- Detailed information for each Pokémon, including stats, abilities, and moves.
+- Search functionality to filter Pokémon by name.
+- Integration with Redis for saving your Pokémon team.
+- NewsAPI integration for updated Pokémon news
+- (Planned) Daily quiz feature and progress tracker
 
 ## Installation
 
-To get started, follow these steps:
+To start:
 
 ### Prerequisites
 - Docker
@@ -34,8 +36,11 @@ docker build -t pokemon-springboot .
 docker run -d -p 8080:8080 pokemon-springboot
 ```
 
-### Dependencies
-- PokeAPI
+### Frameworks and Dependencies
+- PokeAPI: https://pokeapi.co/
+- Pokemon Trivia API: https://github.com/PokeDis/PokemonTrivia
+- NewsAPI: https://newsapi.org/ 
 - Tailwind CSS
 - Spring Boot
 - Thymeleaf
+- Redis
