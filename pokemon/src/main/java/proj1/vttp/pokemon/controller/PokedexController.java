@@ -67,7 +67,9 @@ public class PokedexController {
     public String processLogin(@RequestParam(name = "login", required = false, defaultValue = "default") String login,
             HttpSession session, Model model) {
         List<Pokemon> userParty = userService.getParty(login); // find party from redis
-        session.setAttribute(UserUtils.USER_SESSION, login); // set username as current session
+        Integer userScore = userService.getScore(login); //find current game score from redis
+        session.setAttribute(UserUtils.USER_SCORE, userScore); //set score for current session
+        session.setAttribute(UserUtils.USER_SESSION, login); // set username for current session
         session.setAttribute(UserUtils.USER_PARTY, userParty); // set found party to current session
         model.addAttribute("userParty", userParty);
 

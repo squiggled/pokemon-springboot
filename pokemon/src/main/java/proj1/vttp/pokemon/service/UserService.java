@@ -16,6 +16,7 @@ public class UserService {
     @Autowired
     RedisRepository redisRepository;
 
+    //get party
      public List<Pokemon> getParty(String user){ 
         List<Pokemon> savedParty;
         Party userParty = redisRepository.getParty(user);
@@ -27,9 +28,26 @@ public class UserService {
         return savedParty;
     }
     
+    //save party
     public void save(List<Pokemon> party, String username){
         Party userParty = new Party(party);
         redisRepository.saveParty(userParty, username);
+    }
 
+    //get score
+    public Integer getScore(String user){
+        Integer userScore;
+        Integer foundScore = redisRepository.getScore(user);
+        if (foundScore == null){
+            userScore=0;
+        } else {
+            userScore= foundScore;
+        }
+        return userScore;
+    }
+
+    //save score
+    public void saveScore(Integer score, String username){
+        redisRepository.saveScore(score, username);
     }
 }

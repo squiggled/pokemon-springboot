@@ -4,6 +4,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,15 +20,18 @@ import proj1.vttp.pokemon.model.Article;
 @Service
 public class NewsAPIService {
 
+    private Logger logger = Logger.getLogger(NewsAPIService.class.getName());
+
     @Value("${newsapi.key}")
     private String newsAPIKey;
 
     RestTemplate template = new RestTemplate();
-    private String URL_NEWSAPI = "https://newsapi.org/v2/everything?q=pokemon&apiKey=";
+    private String URL_NEWSAPI = "https://newsapi.org/v2/everything?q=pokemon&sortBy=publishedAt&apiKey=";
     List<Article> articles;
 
     public List<Article> getNews(){
         String response = template.getForObject(URL_NEWSAPI+newsAPIKey, String.class);
+        logger.log(Level.INFO, "🟢 News API called: %s".formatted(URL_NEWSAPI+newsAPIKey));
         Reader reader = new StringReader(response);
         JsonReader jsonReader = Json.createReader(reader);
         JsonObject outer = jsonReader.readObject();
@@ -34,7 +39,7 @@ public class NewsAPIService {
         articles = new LinkedList<>();
         for (JsonObject articleObj : data.getValuesAs(JsonObject.class)){
             Article article = new Article();
-            article.setTitle(articleObj.getString("title"), "");
+            article.setTitle(articleObj.getString("title", ""));
             article.setArticleUrl(articleObj.getString("url", ""));
             article.setDescription(articleObj.getString("description", ""));
             article.setTimestamp(articleObj.getString("publishedAt", ""));

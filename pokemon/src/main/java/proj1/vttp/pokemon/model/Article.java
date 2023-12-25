@@ -13,7 +13,7 @@ public class Article {
     public String getTitle() {
         return title;
     }
-    public void setTitle(String title, String string) {
+    public void setTitle(String title) {
         this.title = title;
     }
     public String getImageUrl() {
@@ -42,6 +42,4 @@ public class Article {
         this.articleUrl = articleUrl;
     }
 
-    
-    
 }

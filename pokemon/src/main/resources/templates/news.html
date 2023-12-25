@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Pokédex</title>
+    <title>Pokédex - News</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="shortcut icon"
@@ -27,12 +27,12 @@
           <div class="flex gap-4 mb-4 md:mb-0">
             <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
             <a href="/news" class="text-blue-500 hover:text-blue-700">News</a>
-            <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
+            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Quiz</a>
           </div>
         </div>
         <!--end nav -->
         <article class="flex flex-col md:flex-row mb-4 mt-4 bg-white shadow-lg rounded-lg overflow-hidden max-w-5xl mx-auto" th:each="article : ${newsList}">
-          <!-- <div class="container mx-auto px-4"> -->
+          <a th:href="@{${article.articleUrl}}">
             <div>
               <img class="h-auto max-w-md m-4" th:src="@{${article.imageUrl}}" />
             </div>
@@ -41,14 +41,15 @@
               <p  th:text="${article.title}" class="text-2xl font-bold"></p>
 
               <p class="mt-2 text-gray-600" th:text="${article.description}"></p>
-
-              <a
-                class="text-blue-500 self-end hover:text-blue-700 mt-4"
-                th:href="@{${article.articleUrl}}"
-                th:text="'Link to full article'"
-              ></a>
+              <div class="flex justify-between items-center">
+                <p class="text-sm text-gray-400" th:text="${article.timestamp}"></p>
+                <a class="text-blue-500 hover:text-blue-700" th:href="@{${article.articleUrl}}" th:text="'Link to full article'"></a>
+            </div>
+            
+              
               <!-- include 'link to full article' inside singular quotation to indicate its a string -->
             </div>
+          </a>
         </article>
       </div>
     </div>

@@ -21,7 +21,5 @@ public class NewsController {
         List<Article> newsList = newsAPIService.getNews();
         model.addAttribute("newsList", newsList);
         return "news";
-
-
     }
 }

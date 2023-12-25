@@ -49,6 +49,7 @@ public class PokeAPIService {
     //for loading 20 more pokemon
     public List<SimplePokemon> load20More(Integer offset){
         String URL_LOADMORE = "https://pokeapi.co/api/v2/pokemon/?offset="+offset+"&limit=20";
+        logger.log(Level.INFO, "🟢 PokeAPI called: %s".formatted(URL_LOADMORE));
         System.out.println("offset:" +offset);
         String response = template.getForObject(URL_LOADMORE, String.class);
         Reader reader = new StringReader(response);
@@ -183,6 +184,7 @@ public class PokeAPIService {
                 default:
             }
         }
+        logger.log(Level.INFO, "🟢 Pokemon: %s found".formatted(pokeObj.getName()));
         return pokeObj;
     }
 

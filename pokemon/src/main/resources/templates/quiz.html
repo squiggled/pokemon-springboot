@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pokédex - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      th:href="@{/squared_pokemon_transparent.ico}"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="py-5">
+        <!-- nav -->
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <!--login and home -->
+          <div class="flex gap-4 mb-4 md:mb-0">
+            <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
+            <a href="/party" class="text-blue-500 hover:text-blue-700"
+              >My Team</a
+            >
+          </div>
+
+          <!-- other links -->
+          <div class="flex gap-4 mb-4 md:mb-0">
+            <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
+            <a href="/news" class="text-blue-500 hover:text-blue-700">News</a>
+            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Quiz</a>
+          </div>
+        </div>
+      </div>
+      <!-- nav end -->
+      <!--page body: quiz-->
+      <div>
+        <p th:text="'Your current high score: ' + ${totalScore}"></p>
+      </div>
+      <div th:if="${message}">
+        <p th:text="${message}"></p>
+      </div>
+      <div th:object="${question}">
+        <h1 th:text="${question.id} + ': ' + ${question.question}">Default Question</h1>
+        <div>
+            <img class="h-auto max-w-md m-4" th:src="${question.imageUrl}" alt="Question Image" />
+        </div>
+        <div>
+            <form method="post" th:action="@{/quiz}">
+                <input type="text" name="answer">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    </div>
+  </body>
+</html>

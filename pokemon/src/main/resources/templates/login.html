@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <title>Pokédex</title>
+    <title>Pokédex - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="shortcut icon"
@@ -25,17 +25,18 @@
           <div class="flex gap-4 mb-4 md:mb-0">
             <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
             <a href="/news" class="text-blue-500 hover:text-blue-700">News</a>
-            <a href="#" class="text-blue-500 hover:text-blue-700">Daily Quiz</a>
+            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Quiz</a>
           </div>
         </div>
       </div>
+      <!-- nav end -->
 
        <!-- login -->
-       <div class="flex justify-center items-center min-h-screen">
+       <div class="flex justify-center items-start min-h-screen pt-16">
         <div class="w-full max-w-xs">
             <!-- to logout -->
-            <div th:if="${currentUser}" th:object="${currentUser}">
-                <div class="flex flex-col items-center justify-center min-h-screen">
+            <div th:if="${currentUser}" th:object="${currentUser}" class="mb-4">
+                <div class="flex flex-col items-center justify-start min-h-screen">
                     <h1 class="text-center text-2xl font-bold mb-4">Welcome, <span th:text="${currentUser}"></span></h1>
                     <form th:action="@{/logout}" method="post" class="text-center">
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
