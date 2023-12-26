@@ -1,15 +1,18 @@
 # Pokédex + Team Builder
 
 ## Description
-This project is a Pokédex web application. It allows users to browse through Pokémon and their stats, abilities, and movesets. The search functionality allows you to search by Pokemon or move. 
+This project is a one-stop hub for every Pokémon fan. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
 
 ## Features
-- PokeDex features for all 1025 Pokémon.
-- Detailed information for each Pokémon, including stats, abilities, and moves.
-- Search functionality to filter Pokémon by name.
-- Integration with Redis for saving your Pokémon team.
-- NewsAPI integration for updated Pokémon news
-- (Planned) Daily quiz feature and progress tracker
+- PokéDex 
+    - Detailed information for all 1025 Pokémon, including stats, abilities, and moves.
+    - Search functionality to filter Pokémon by name.
+    - Integration with Redis for saving your Pokémon team.
+- Ultimate Trainer Challenge
+    - Earn badges on your trainer profile by playing the quiz challenge.
+- Pokémon News Center
+    - NewsAPI integration for updated Pokémon news.
+- (Planned) Unit tests to ensure the reliability and functionality of the application.
 
 ## Installation
 
@@ -20,8 +23,8 @@ To start:
 
 ### Clone the repository
 ```bash
-git clone https://github.com/your-username/pokemon-project.git
-cd pokemon-project
+git clone https://github.com/username/pokemon-springboot.git
+cd pokemon-springboot
 ```
 
 ### Installation with Docker
@@ -44,3 +47,4 @@ docker run -d -p 8080:8080 pokemon-springboot
 - Spring Boot
 - Thymeleaf
 - Redis
+- JUnit
