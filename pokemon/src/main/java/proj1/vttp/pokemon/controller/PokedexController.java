@@ -66,6 +66,12 @@ public class PokedexController {
     @PostMapping("/login")
     public String processLogin(@RequestParam(name = "login", required = false, defaultValue = "default") String login,
             HttpSession session, Model model) {
+
+        if (login.length()<3){
+            String error = "Name must be at least 3 characters long";
+            model.addAttribute("error", error);
+            return "login";
+        }
         List<Pokemon> userParty = userService.getParty(login); // find party from redis
         Integer userScore = userService.getScore(login); //find current game score from redis
         session.setAttribute(UserUtils.USER_SCORE, userScore); //set score for current session
@@ -107,7 +113,12 @@ public class PokedexController {
     @GetMapping("/party")
     public String party(Model model, HttpSession session) {
         List<Party> party = (List<Party>) session.getAttribute(UserUtils.USER_PARTY);
+        String username = (String) session.getAttribute(UserUtils.USER_SESSION);
+        Integer userScore = userService.getScore(username);
+        List<String> badges = userService.countBadges(userScore); //calculate badges
+        model.addAttribute("badges", badges);
         model.addAttribute("party", party);
+        model.addAttribute("username", username);
         return "party";
     }
 

@@ -2,6 +2,7 @@ package proj1.vttp.pokemon.service;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,11 +19,22 @@ public class QuizAPIService {
     
     private Logger logger = Logger.getLogger(QuizAPIService.class.getName());
     RestTemplate template = new RestTemplate();
-    private String URL_QUESTION = "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=images";
+    private String[] URL_QUESTIONS = {
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen1",
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen2",
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen3",
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen4",
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen5",
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen6",
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen7",
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=bonus", 
+        "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=images"};
 
     public Question getQuestion(){
-        String response = template.getForObject(URL_QUESTION, String.class);
-        logger.log(Level.INFO, "🟢 Pokemon Trivia API called: %s".formatted(URL_QUESTION));
+        Random rand = new Random();
+        int randomNumber = rand.nextInt(9);
+        String response = template.getForObject(URL_QUESTIONS[randomNumber], String.class);
+        logger.log(Level.INFO, "🟢 Pokemon Trivia API called: %s".formatted(URL_QUESTIONS[randomNumber]));
         Reader reader = new StringReader(response);
         JsonReader jReader = Json.createReader(reader);
         JsonObject jObj = jReader.readObject();

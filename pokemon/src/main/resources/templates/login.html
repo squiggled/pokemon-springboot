@@ -7,7 +7,7 @@
     <link
       rel="shortcut icon"
       type="image/x-icon"
-      th:href="@{/squared_pokemon_transparent.ico}"
+      th:href="@{/img/squared_pokemon_transparent.ico}"
     />
   </head>
   <body class="bg-gray-100">
@@ -53,6 +53,7 @@
                   Enter your name:
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="login" placeholder="Username">
+                <span th:if="${error}" th:text="${error}" style="color: red;" class="mt-2"></span>
               </div>
               <div class="flex items-center justify-center">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">

@@ -1,5 +1,6 @@
 package proj1.vttp.pokemon.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +16,8 @@ public class UserService {
     
     @Autowired
     RedisRepository redisRepository;
+
+    private static final int[] BADGE_MILESTONES = {20, 50, 100, 150, 200, 300, 500, 1000};
 
     //get party
      public List<Pokemon> getParty(String user){ 
@@ -49,5 +52,16 @@ public class UserService {
     //save score
     public void saveScore(Integer score, String username){
         redisRepository.saveScore(score, username);
+    }
+
+    //determine user badges - get a list of badge file names the user has
+    public List<String> countBadges (Integer score){
+        List<String> badges = new ArrayList<>();
+        for (int milestone : BADGE_MILESTONES){
+            if (score>= milestone){
+                badges.add("badge-"+milestone);
+            }
+        }
+        return badges;
     }
 }
