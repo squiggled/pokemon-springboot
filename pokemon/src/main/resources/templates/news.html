@@ -14,43 +14,52 @@
     <div class="container mx-auto px-4">
       <div class="py-5">
         <!-- nav -->
-        <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center justify-between">
           <!--login and home -->
-          <div class="flex gap-4 mb-4 md:mb-0">
+          <div class="flex gap-4">
             <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
-            <a href="/party" class="text-blue-500 hover:text-blue-700"
-              >My Team</a
-            >
+            <a href="/party" class="text-blue-500 hover:text-blue-700" >My Party</a>
           </div>
-
+          <div>
+            <a href="/">
+              <img
+                th:src="@{/img/pokemon-logo.png}"
+                alt="Pokémon Logo"
+                class="ml-10 h-12"
+              />
+            </a>
+          </div>
           <!-- other links -->
-          <div class="flex gap-4 mb-4 md:mb-0">
+          <div class="flex gap-4">
             <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
+            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Challenge</a>
             <a href="/news" class="text-blue-500 hover:text-blue-700">News</a>
-            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Quiz</a>
           </div>
         </div>
-        <!--end nav -->
-        <article class="flex flex-col md:flex-row mb-4 mt-4 bg-white shadow-lg rounded-lg overflow-hidden max-w-5xl mx-auto" th:each="article : ${newsList}">
-          <a th:href="@{${article.articleUrl}}">
-            <div>
-              <img class="h-auto max-w-md m-4" th:src="@{${article.imageUrl}}" />
-            </div>
-            <div class="p-4 w-full flex flex-col justify-between">
-                <!--above: make the div take the full width of the card(w-full) + arrange children w space between (justify between)-->
-              <p  th:text="${article.title}" class="text-2xl font-bold"></p>
+        <!-- nav end -->
+        <div class=" my-4">
+          <div class="max-w-5xl mx-auto"> 
+            <h1 class="text-3xl ml-4 font-bold mb-2">News Center</h1>
+          </div>
+          
+          <article class="flex flex-col md:flex-row mb-4 mt-4 bg-white shadow-lg rounded-lg overflow-hidden max-w-5xl mx-auto" th:each="article : ${newsList}">
+            <a th:href="@{${article.articleUrl}}">
+              <div>
+                <img class="h-auto max-w-md m-4" th:src="@{${article.imageUrl}}" />
+              </div>
+              <div class="p-4 w-full flex flex-col justify-between">
+                  <!--above: make the div take the full width of the card(w-full) + arrange children w space between (justify between)-->
+                <p  th:text="${article.title}" class="text-2xl font-bold"></p>
 
-              <p class="mt-2 text-gray-600" th:text="${article.description}"></p>
-              <div class="flex justify-between items-center">
-                <p class="text-sm text-gray-400" th:text="${article.timestamp}"></p>
-                <a class="text-blue-500 hover:text-blue-700" th:href="@{${article.articleUrl}}" th:text="'Link to full article'"></a>
-            </div>
-            
-              
-              <!-- include 'link to full article' inside singular quotation to indicate its a string -->
-            </div>
-          </a>
-        </article>
+                <p class="mt-2 text-gray-600" th:text="${article.description}"></p>
+                <div class="flex justify-between items-center">
+                  <p class="text-sm text-gray-400" th:text="${article.timestamp}"></p>
+                  <a class="text-blue-500 hover:text-blue-700" th:href="@{${article.articleUrl}}" th:text="'Link to full article'"></a>
+              </div>
+              </div>
+            </a>
+          </article>
+        </div>
       </div>
     </div>
   </body>

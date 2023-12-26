@@ -38,7 +38,7 @@ public class TypeUtils {
             case GHOST:
                 return "bg-slate-900 text-white";
             case DRAGON:
-                return "bg-fuschia-500 text-white";
+                return "bg-purple-500 text-white";
             case DARK:
                 return "bg-gray-950 text-white";
             case STEEL:

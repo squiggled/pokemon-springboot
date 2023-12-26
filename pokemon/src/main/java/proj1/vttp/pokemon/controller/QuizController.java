@@ -92,7 +92,7 @@ public class QuizController {
 
             //reset question attempts
             session.setAttribute(UserUtils.QUESTION_ATTEMPTS, 0);
-            
+
             // also set scores in current session
             session.setAttribute(UserUtils.USER_SCORE, totalScore);
             session.setAttribute(UserUtils.CURRENT_QUESTION, null); // reset the qn
@@ -109,5 +109,26 @@ public class QuizController {
             model.addAttribute("totalScore", totalScore);
             return "quiz";
         }
+    }
+
+    @PostMapping("/quiz/skip")
+    public String skipQuestion(HttpSession session, RedirectAttributes redirectAttributes){
+        //reset attempts 
+        session.setAttribute(UserUtils.QUESTION_ATTEMPTS, 0);
+
+        //deduct from score
+        Integer totalScore = (Integer) session.getAttribute(UserUtils.USER_SCORE);
+        totalScore-=5;
+
+        //save new score to redis
+        String username = (String) session.getAttribute(UserUtils.USER_SESSION);
+        userService.saveScore(totalScore, username);
+
+        //set score in current session
+        session.setAttribute(UserUtils.USER_SCORE, totalScore);
+        session.setAttribute(UserUtils.CURRENT_QUESTION, null); // reset the qn
+        redirectAttributes.addFlashAttribute("message", "Question skipped - 5 points deducted");
+
+        return "redirect:/quiz";
     }
 }

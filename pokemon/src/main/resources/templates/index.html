@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokédex</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -14,25 +15,33 @@
     <div class="container mx-auto px-4">
       <div class="py-5">
         <!-- nav -->
-        <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center justify-between">
           <!--login and home -->
-          <div class="flex gap-4 mb-4 md:mb-0">
+          <div class="flex gap-4">
             <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
-            <a href="/party" class="text-blue-500 hover:text-blue-700">My Team</a>
-            
+            <a href="/party" class="text-blue-500 hover:text-blue-700" >My Party</a>
           </div>
-
+          <div>
+            <a href="/">
+              <img
+                th:src="@{/img/pokemon-logo.png}"
+                alt="Pokémon Logo"
+                class="ml-10 h-12"
+              />
+            </a>
+          </div>
           <!-- other links -->
-          <div class="flex gap-4 mb-4 md:mb-0">
+          <div class="flex gap-4">
             <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
+            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Challenge</a>
             <a href="/news" class="text-blue-500 hover:text-blue-700">News</a>
-            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Quiz</a>
           </div>
         </div>
+        <!-- nav end -->
 
         <!--search -->
         <div class="flex justify-center">
-          <div class="flex items-center">
+          <div class="flex items-center mt-2">
             <label for="search" class="sr-only">Search for Pokémon</label>
             <div class="relative">
               <input
@@ -94,7 +103,7 @@
             <input type="hidden" th:name="pokemonId" th:value="${pokemon.id}" />
             <button
               type="submit"
-              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-4"
+              class="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded m-4"
             >
               Add
             </button>

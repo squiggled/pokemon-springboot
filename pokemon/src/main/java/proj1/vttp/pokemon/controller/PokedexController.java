@@ -1,7 +1,9 @@
 package proj1.vttp.pokemon.controller;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,9 +118,23 @@ public class PokedexController {
         String username = (String) session.getAttribute(UserUtils.USER_SESSION);
         Integer userScore = userService.getScore(username);
         List<String> badges = userService.countBadges(userScore); //calculate badges
+
+        //render tooltip for each badge
+        Map<String, String> badgeDescriptions = new HashMap<>();
+        badgeDescriptions.put("badge-20", "Achieved 20 points on the Quiz Challenge");
+        badgeDescriptions.put("badge-50", "Achieved 50 points on the Quiz Challenge");
+        badgeDescriptions.put("badge-100", "Achieved 100 points on the Quiz Challenge");
+        badgeDescriptions.put("badge-150", "Achieved 150 points on the Quiz Challenge");
+        badgeDescriptions.put("badge-200", "Achieved 200 points on the Quiz Challenge");
+        badgeDescriptions.put("badge-300", "Achieved 300 points on the Quiz Challenge");
+        badgeDescriptions.put("badge-500", "Achieved 500 points on the Quiz Challenge");
+        badgeDescriptions.put("badge-1000", "Achieved 1000 points on the Quiz Challenge");
+        model.addAttribute("badgeDescriptions", badgeDescriptions);
+
         model.addAttribute("badges", badges);
         model.addAttribute("party", party);
         model.addAttribute("username", username);
+        model.addAttribute("userScore", userScore);
         return "party";
     }
 
