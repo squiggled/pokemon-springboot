@@ -1,10 +1,20 @@
+function throttle(func, delay){
+    let lastCall = 0;
+    return function(...args) {
+        const now = new Date().getTime();
+        if (now - lastCall < delay) {
+            return;
+        }
+        lastCall = now;
+        return func(...args);
+    };
+};
+
+let isLoading = false;  //check if fetching is already in progress
+
 document.addEventListener('DOMContentLoaded', function() {
     var searchInput = document.getElementById('search');
     var searchButton = document.getElementById('searchButton'); 
-    var loadMoreButton = document.getElementById('loadMoreButton');
-    if (loadMoreButton) {
-        loadMoreButton.addEventListener('click', loadMorePokemon);
-    }
 
     function performSearch() {
         var query = searchInput.value; //select the element first, then get value from it
@@ -20,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => console.error('Error:', error));
     }
+
     //add events for 'enter' and clicking search
     if (searchInput) {
         searchInput.addEventListener('keypress', function(event) {
@@ -52,21 +63,31 @@ function updateSearchResults(data) {
 
 //for loading more
 function loadMorePokemon(){
+    if (isLoading) return;
+    isLoading = true;
     let offset = document.querySelectorAll('.pokemon-item').length; //count the numebr of elements that have this class applied to it
     fetch(`/load20more?offset=${offset}&limit=20`)
-        .then(response => response.json()) //the restcontroller will return 'response
+        .then(response => response.json()) //the restcontroller will return response
         .then(pokemon => {
             //append new Pokémon to the search results
             pokemon.forEach(pokemon => {
                 var pokemonElement = createPokemonElement(pokemon);
                 document.getElementById('searchResults').appendChild(pokemonElement);
             });
+            isLoading = false;
         })
         .catch(error => console.error('Error:', error));
 }
+window.addEventListener('scroll', throttle(function() {
+    //check if the user is near the bottom of the page
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !isLoading) {
+        loadMorePokemon();
+    }
+}, 1000)); 
+
 function createPokemonElement(pokemon) {
     var pokemonElement = document.createElement('div');
-    pokemonElement.className = 'pokemon-item max-w-sm rounded overflow-hidden shadow-lg bg-white pokemon-item';
+    pokemonElement.className = 'pokemon-item max-w-sm rounded overflow-hidden shadow-lg bg-white mb-4 pokemon-item';
     pokemonElement.innerHTML = `
         <a href="/pokemon/${pokemon.id}" class="block">
             <img src="${pokemon.imageUrl}" alt="Pokémon Image" class="w-full">
