@@ -38,63 +38,50 @@
         </div>
         <!-- nav end -->
 
-        <!--page body: quiz-->
-        <div class="text-center my-4">
-          <h1 class="text-3xl font-bold mb-2">Ultimate Trainer Challenge</h1>
-          <p class="text-lg mb-2">
-            Your current high score: <span th:text="${totalScore}">0</span>
-          </p>
-          <p th:if="${message}" th:text="${message}" class="text-red-500"></p>
-        </div>
-
-        <!-- question -->
-        <div th:object="${question}" class="text-center my-4">
-          <h2
-            th:text="${question.id} + ': ' + ${question.question}"
-            class="text-2xl mb-4"
-          >
-            Default Question
-          </h2>
-          <img
-            class="h-auto max-w-md mx-auto mb-4"
-            th:src="${question.imageUrl}"
-            alt="Question Image"
-          />
-          <div class="flex justify-center items-center space-x-4">
-          <form
-            method="post"
-            th:action="@{/quiz}"
-            class="inline-flex items-center"
-          >
-            <input
-              type="text"
-              name="answer"
-              class="border border-gray-300 rounded py-2 px-4 mr-2"
-            />
-            <button
-              type="submit"
-              class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
-            >
-              Submit
-            </button>
-          </form>
-
-          <form method="post" th:action="@{/quiz/skip}" >
-            <button
-              type="submit"
-              class="border border-black bg-white-500 hover:bg-white-700 text-black font-bold py-2 px-4 rounded text-md"
-            >
-              Skip
-            </button>
-          </form>
-        </div>
-        </div>
-        <!--quiz rules-->
-        <div class="text-center mb-4 mt-2">
-          <h2 class="text-xl font-semibold mb-2">
-            Rules:
-            <span class="mb-1 text-lg font-normal">1st attempt: 5 points | 2nd attempt: 3 points | Other attempts: 1 point | Skip a question: -5 points</span>
-          </h2>
+        <h1 class="text-3xl font-bold mb-2 mt-2 text-center">Ultimate Trainer Challenge</h1>
+        <div class="flex flex-wrap mt-4 mx-2">
+          <!-- main quiz card -->
+          <div class="w-full lg:w-3/4 px-2 order-1 lg:order-1">
+            <div class="bg-white p-6 shadow-lg rounded-lg">
+              
+              <div th:object="${question}" class="text-center">
+                <h2 th:text="${question.id} + ': ' + ${question.question}" class="text-2xl mb-4">Default Question</h2>
+                <img class="h-auto max-w-md mx-auto mb-4" th:src="${question.imageUrl}" alt="Question Image" />
+                <!-- answer input and buttons -->
+                <div class="flex justify-center items-center space-x-4 mb-4">
+                  <form method="post" th:action="@{/quiz}">
+                    <input type="text" name="answer" class="border border-gray-300 rounded py-2 px-4" />
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Submit</button>
+                  </form>
+                  <form method="post" th:action="@{/quiz/skip}">
+                    <button type="submit" class="border border-black bg-white-500 hover:bg-white-700 text-black font-bold py-2 px-4 rounded text-md">Skip</button>
+                  </form>
+                </div>
+                <!-- message display -->
+                <p th:if="${message}" th:text="${message}" class="text-red-500"></p>
+              </div>
+            </div>
+          </div>
+    
+          <!-- sidebar: rules and high score -->
+          <div class="w-full lg:w-1/4 px-2 mb-4 order-2 lg:order-2">
+            <div class="bg-white p-4 shadow-lg rounded-lg">
+              <h2 class="text-xl font-semibold mb-2">Your Current Score</h2>
+              <p class="text-xl font-semibold mb-2"> <span th:text="${totalScore}">0</span></p>
+              <div th:if="${nextBadge}">
+                <p>Points to next badge: <span th:text="${pointsToNextBadge}">0</span></p>
+                <img class="mx-auto mt-2 h-12" th:src="@{'/img/' + ${nextBadge} + '.png'}" alt="Next Badge"/>
+              </div>
+              <div th:if="${nextBadge} == null">
+                <p>All badges attained!</p>
+              </div>
+              <h2 class="text-xl font-semibold mt-4 mb-2">Rules</h2>
+              <p class="text-lg">1st attempt: 5 points</p>
+              <p class="text-lg">2nd attempt: 3 points</p>
+              <p class="text-lg">Other attempts: 1 point</p>
+              <p class="text-lg">Skip a question: -5 points</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

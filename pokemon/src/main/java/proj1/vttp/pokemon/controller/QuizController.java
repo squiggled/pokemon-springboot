@@ -44,6 +44,10 @@ public class QuizController {
             totalScore = 0;
         }
 
+        //find points to next badge
+        Integer pointsToNextBadge = userService.pointsToNextBadge(totalScore);
+        String nextBadge = userService.nextBadge(totalScore);
+
         // initialise attempts
         Integer attempts = (Integer) session.getAttribute(UserUtils.QUESTION_ATTEMPTS);
         if (attempts == null) {
@@ -52,6 +56,8 @@ public class QuizController {
 
         session.setAttribute(UserUtils.USER_SCORE, totalScore);
         session.setAttribute(UserUtils.QUESTION_ATTEMPTS, attempts);
+        model.addAttribute("pointsToNextBadge", pointsToNextBadge);
+        model.addAttribute("nextBadge", nextBadge);
         model.addAttribute("totalScore", totalScore);
         model.addAttribute("attempts", attempts);
         System.out.println(question.getQuestion());

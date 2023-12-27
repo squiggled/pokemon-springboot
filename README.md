@@ -1,7 +1,7 @@
 # Pokédex + Team Builder
 
 ## Description
-This app is a one-stop hub for every Pokémon fan. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
+This app is a one-stop hub for every Pokémon trainer. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
 
 ## Features
 - PokéDex 
@@ -10,10 +10,11 @@ This app is a one-stop hub for every Pokémon fan. It has three main functions -
     - Integration with Redis for saving your Pokémon team.
 - Ultimate Trainer Challenge
     - Earn badges on your trainer profile by playing the quiz challenge.
-- Pokémon News Center
+- News Center
     - NewsAPI integration for updated Pokémon news.
 - Additional features
-    - Unit tests to ensure the reliability and functionality of the application.
+    - Automated unit and integration tests to ensure the reliability and functionality of the application.
+    - Logging to track code events and for easier debugging. 
 
 ## Installation
 

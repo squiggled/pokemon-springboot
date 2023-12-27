@@ -64,4 +64,23 @@ public class UserService {
         }
         return badges;
     }
+
+    //count points to next badge
+    public Integer pointsToNextBadge(Integer currentScore) {
+        for (int milestone : BADGE_MILESTONES) {
+            if (currentScore < milestone) {
+                return milestone - currentScore;
+            }
+        }
+        return 0; //if all badges are attained
+    }
+
+    public String nextBadge(Integer currentScore){
+        for (int milestone : BADGE_MILESTONES) {
+            if (currentScore < milestone) {
+                return "badge-"+milestone;
+            }
+        }
+        return null; //if all badges are attained
+    }
 }

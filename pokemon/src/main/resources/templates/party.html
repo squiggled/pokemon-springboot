@@ -49,12 +49,12 @@
               <img th:src="@{/img/user-default.png}" alt="Trainer" class="w-full h-full object-cover">
           </div>
           <!-- trainer details -->
-          <h2 class="text-xl font-bold">Trainer: <span th:text="${username}">Ash Ketchum</span></h2>
+          <h2 class="text-xl font-bold"><span th:text="${username}">Ash Ketchum</span></h2>
           <h2 th:text="'High Score: ' + ${userScore}" class="text-center text-md font-semibold mb-2"></h2>
       </div>
         <!-- badges -->
         <div class="p-4 bg-white shadow-lg rounded-lg max-w-lg mx-auto">
-          <h3 class="text-center text-lg font-semibold">Badges</h3>
+          <h3 class="text-center text-lg font-semibold">Trainer Challenge Badges</h3>
           <div class="grid grid-cols-4 gap-2">
             <div th:each="badge, iterStat : ${badges}">
               <img th:src="@{'/img/' + ${badge} + '.png'}" alt="Badge" class="h-16 mt-2 mx-auto" th:title="${badgeDescriptions[badge]}">   
