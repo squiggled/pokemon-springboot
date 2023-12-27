@@ -19,7 +19,7 @@ public class QuizAPIService {
     
     private Logger logger = Logger.getLogger(QuizAPIService.class.getName());
     RestTemplate template = new RestTemplate();
-    private String[] URL_QUESTIONS = {
+    public static String[] URL_QUESTIONS = {
         "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen1",
         "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen2",
         "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen3",
@@ -45,8 +45,11 @@ public class QuizAPIService {
         question.setAnswer(innerObj.getString("word"));
         question.setQuestion(innerObj.getString("imageText"));
         question.setImageUrl(innerObj.getString("image"));
-        System.out.println(question);
         return question;
+    }
+
+    public Object getRandom() {
+        return null;
     }
 
 }

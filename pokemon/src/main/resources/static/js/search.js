@@ -12,7 +12,7 @@ function throttle(func, delay){
 
 let isLoading = false;  //check if fetching is already in progress
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { //only run js after all content has been loaded
     var searchInput = document.getElementById('search');
     var searchButton = document.getElementById('searchButton'); 
 
@@ -83,7 +83,7 @@ window.addEventListener('scroll', throttle(function() {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !isLoading) {
         loadMorePokemon();
     }
-}, 1000)); 
+}, 500)); 
 
 function createPokemonElement(pokemon) {
     var pokemonElement = document.createElement('div');

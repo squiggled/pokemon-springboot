@@ -32,9 +32,13 @@ public class QuizController {
         if (currentQuestion == null) {
             session.setAttribute(UserUtils.CURRENT_QUESTION, question);
             model.addAttribute("question", question);
+            System.out.println(question.getQuestion());
+            System.out.println(question.getAnswer());
         } else { // if session!=null, user has not solved the qn, so keep the current question
             session.setAttribute(UserUtils.CURRENT_QUESTION, currentQuestion);
             model.addAttribute("question", currentQuestion);
+            System.out.println(currentQuestion.getQuestion());
+            System.out.println(currentQuestion.getAnswer());
         }
 
         // initialise total score
@@ -60,8 +64,7 @@ public class QuizController {
         model.addAttribute("nextBadge", nextBadge);
         model.addAttribute("totalScore", totalScore);
         model.addAttribute("attempts", attempts);
-        System.out.println(question.getQuestion());
-        System.out.println(question.getAnswer());
+        
         return "quiz";
     }
 
@@ -104,16 +107,13 @@ public class QuizController {
             session.setAttribute(UserUtils.CURRENT_QUESTION, null); // reset the qn
             redirectAttributes.addFlashAttribute("message", "Correct answer! You earned " + roundScore + " points");
             return "redirect:/quiz";
+            
         } else {
             attempts++;
             session.setAttribute(UserUtils.QUESTION_ATTEMPTS, attempts);
             String message = "Wrong answer. Try again";
-            model.addAttribute("message", message);
-
-            session.setAttribute(UserUtils.USER_SCORE, totalScore);
-            model.addAttribute("question", currentQuestion);
-            model.addAttribute("totalScore", totalScore);
-            return "quiz";
+            redirectAttributes.addFlashAttribute("message", message);
+            return "redirect:/quiz";
         }
     }
 

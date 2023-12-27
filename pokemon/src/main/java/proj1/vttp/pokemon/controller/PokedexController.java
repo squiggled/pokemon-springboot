@@ -69,7 +69,7 @@ public class PokedexController {
     public String processLogin(@RequestParam(name = "login", required = false, defaultValue = "default") String login,
             HttpSession session, Model model) {
 
-        if (login.length()<3){
+        if ((login.length()<3) || (login==null)){
             String error = "Name must be at least 3 characters long";
             model.addAttribute("error", error);
             return "login";
