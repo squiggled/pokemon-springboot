@@ -1,0 +1,1 @@
+export NEWSAPI_KEY="3c5a5ef9ef65429e95fd9644caa04755"

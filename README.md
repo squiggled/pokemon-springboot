@@ -1,7 +1,7 @@
 # Pokédex + Team Builder
 
 ## Description
-This project is a one-stop hub for every Pokémon fan. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
+This app is a one-stop hub for every Pokémon fan. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
 
 ## Features
 - PokéDex 
@@ -12,7 +12,8 @@ This project is a one-stop hub for every Pokémon fan. It has three main functio
     - Earn badges on your trainer profile by playing the quiz challenge.
 - Pokémon News Center
     - NewsAPI integration for updated Pokémon news.
-- (Planned) Unit tests to ensure the reliability and functionality of the application.
+- Additional features
+    - Unit tests to ensure the reliability and functionality of the application.
 
 ## Installation
 
@@ -48,3 +49,4 @@ docker run -d -p 8080:8080 pokemon-springboot
 - Thymeleaf
 - Redis
 - JUnit
+- Mockito
