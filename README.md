@@ -1,10 +1,10 @@
-# Pokédex + Team Builder
+# Pokémon Center
 
 ## Description
-This app is a one-stop hub for every Pokémon trainer. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
+Pokémon Center is a one-stop hub for every Pokémon trainer. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
 
 ## Features
-- PokéDex 
+- PokéDex + Team Builder
     - Detailed information for all 1025 Pokémon, including stats, abilities, and moves.
     - Search functionality to filter Pokémon by name.
     - Integration with Redis for saving your Pokémon team.
@@ -22,6 +22,7 @@ To start:
 
 ### Prerequisites
 - Docker
+- Your individual API key from https://newsapi.org
 
 ### Clone the repository
 ```bash

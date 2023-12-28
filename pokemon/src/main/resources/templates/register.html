@@ -41,10 +41,10 @@
        <!-- login -->
        <div class="flex justify-center items-start min-h-screen pt-16">
         <div class="w-full max-w-xs">
-            <!-- to logout -->
+            <!-- currentuser already set -->
             <div th:if="${currentUser}" th:object="${currentUser}" class="mb-4">
                 <div class="flex flex-col items-center justify-start min-h-screen">
-                    <h1 class="text-center text-2xl font-bold mb-4">Welcome, <span th:text="${currentUser}"></span></h1>
+                    <h1 class="text-center text-2xl font-bold mb-4">You are already logged in as: <span th:text="${currentUser}"></span></h1>
                     <form th:action="@{/logout}" method="post" class="text-center">
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                             Logout
@@ -52,28 +52,33 @@
                     </form>
                 </div>
             </div>
-           <!-- to login -->
-          <div th:unless="${currentUser}">
-            <h1 class="text-3xl font-bold mb-4 text-center -mt-2">Login</h1>
-            <form method="post" th:action="@{/login}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+           <!-- to register -->
+          <div th:unless="${currentUser}" th:object="${user}">
+            <h1 class="text-3xl font-bold mb-4 -mt-2 text-center">Sign up</h1>
+            <form method="post" th:action="@{/register}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
               <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="login">
-                  Username:
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                  Enter your name:
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="login" placeholder="Username">
-                
-                <label class="block text-gray-700 text-sm font-bold mb-2 mt-4" for="password">
+                <input th:field="*{username}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="username" placeholder="Username">
+                <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red;" class="mt-2"></span>
+                <label class="block text-gray-700 text-sm font-bold mb-2 mt-2" for="password1">
                   Password:
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" name="password">
-                <span th:if="${error}" th:text="${error}" style="color: red;" class="mt-2"></span>
+                <input th:field="*{password1}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="password1" >
+                <span th:if="${#fields.hasErrors('password1')}" th:errors="*{password1}" style="color: red;" class="mt-2"></span>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password2">
+                  Enter password again:
+                </label>
+                <input th:field="*{password2}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="password2" >
+                <span th:if="${#fields.hasErrors('password2')}" th:errors="*{password2}" style="color: red;" class="mt-2"></span>
+                <p th:if="${message}" th:text="${message}" style="color: red;" class="mt-2"></p>
               </div>
-              
               <div class="flex flex-col items-center justify-center space-y-4">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                  Login
+                  Sign up
                 </button>
-                <p class="text-center">Need an account? <a href="/register" class="text-blue-500 hover:text-blue-700">REGISTER</a></p>
+                <p class="text-center">Already a user? <a href="/login" class="text-blue-500 hover:text-blue-700">LOGIN</a></p>
               </div>
             </form>
           </div>

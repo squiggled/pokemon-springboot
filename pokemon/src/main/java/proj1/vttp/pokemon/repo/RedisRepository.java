@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import proj1.vttp.pokemon.model.Party;
+import proj1.vttp.pokemon.model.User;
 
 @Repository
 public class RedisRepository {
@@ -23,7 +24,8 @@ public class RedisRepository {
     //PARTY / key = 'username'
     //get party
     public Party getParty(String username){ 
-        Optional<Object> opt = Optional.ofNullable(template.opsForValue().get(username));
+        String partyKey = username+"-party";
+        Optional<Object> opt = Optional.ofNullable(template.opsForValue().get(partyKey));
         if (opt.isPresent()){
             Party userParty = (Party) opt.get();
             logger.log(Level.INFO, "🟢 Party for %s found in database".formatted(username));
@@ -35,7 +37,8 @@ public class RedisRepository {
 
     //save party
     public void saveParty(Party party, String redisKey){
-        template.opsForValue().set(redisKey, party);
+        String partyKey = redisKey+"-party";
+        template.opsForValue().set(partyKey, party);
         logger.log(Level.INFO, "🟢 Party for %s saved to Redis".formatted(redisKey));
     }
 
@@ -58,6 +61,31 @@ public class RedisRepository {
         String scoreKey = username+"-quiz";
         template.opsForValue().set(scoreKey, score);
         logger.log(Level.INFO, "🟢 Score for %s saved to Redis".formatted(scoreKey));
+    }
+
+    //register
+    public boolean register(String username, User user) {
+        Optional<Object> opt = Optional.ofNullable(template.opsForValue().get(username));
+        if (opt.isPresent()){
+            logger.log(Level.INFO, "🔴 User %s is already registered".formatted(username));
+            return false;
+        }
+        template.opsForValue().set(username, user);
+        logger.log(Level.INFO, "🟢 Successfully registered user %s".formatted(user));
+        return true;
     } 
+
+    //find login credentials
+    public User findLogin(String user){
+        Optional<Object> opt = Optional.ofNullable(template.opsForValue().get(user));
+        if (opt.isPresent()){
+            User userCredentials = (User) opt.get();
+            logger.log(Level.INFO, "🟢 User credentials for %s found in database".formatted(user));
+            return userCredentials;
+        } else {
+            return null;
+        }
+
+    }
 
 }

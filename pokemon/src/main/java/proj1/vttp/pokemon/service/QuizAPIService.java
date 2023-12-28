@@ -2,6 +2,7 @@ package proj1.vttp.pokemon.service;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,7 +19,9 @@ import proj1.vttp.pokemon.model.Question;
 public class QuizAPIService {
     
     private Logger logger = Logger.getLogger(QuizAPIService.class.getName());
+
     RestTemplate template = new RestTemplate();
+    
     public static String[] URL_QUESTIONS = {
         "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen1",
         "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=gen2",
@@ -30,26 +33,29 @@ public class QuizAPIService {
         "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=bonus", 
         "https://pokemontrivia-1-c0774976.deta.app/trivia?endpoint=images"};
 
-    public Question getQuestion(){
-        Random rand = new Random();
-        int randomNumber = rand.nextInt(9);
-        String response = template.getForObject(URL_QUESTIONS[randomNumber], String.class);
-        logger.log(Level.INFO, "🟢 Pokemon Trivia API called: %s".formatted(URL_QUESTIONS[randomNumber]));
-        Reader reader = new StringReader(response);
-        JsonReader jReader = Json.createReader(reader);
-        JsonObject jObj = jReader.readObject();
-        Question question = new Question();
+        public Optional<Question> getQuestion() {
+            try {
+                Random rand = new Random();
+                int randomNumber = rand.nextInt(9);
+                String response = template.getForObject(URL_QUESTIONS[randomNumber], String.class);
+                logger.log(Level.INFO, "🟢 Pokemon Trivia API called: %s".formatted(URL_QUESTIONS[randomNumber]));
         
-        JsonObject innerObj = jObj.getJsonObject("specific");
-        question.setId(jObj.getInt("id"));
-        question.setAnswer(innerObj.getString("word"));
-        question.setQuestion(innerObj.getString("imageText"));
-        question.setImageUrl(innerObj.getString("image"));
-        return question;
-    }
-
-    public Object getRandom() {
-        return null;
-    }
+                Reader reader = new StringReader(response);
+                JsonReader jReader = Json.createReader(reader);
+                JsonObject jObj = jReader.readObject();
+        
+                Question question = new Question();
+                JsonObject innerObj = jObj.getJsonObject("specific");
+                question.setId(jObj.getInt("id"));
+                question.setAnswer(innerObj.getString("word"));
+                question.setQuestion(innerObj.getString("imageText"));
+                question.setImageUrl(innerObj.getString("image"));
+        
+                return Optional.of(question);
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "🔴 Error fetching question from API: " + e.getMessage());
+                return Optional.empty();
+            }
+        }
 
 }

@@ -22,11 +22,11 @@ public class TypeUtils {
             case ICE:
                 return "bg-cyan-200 text-white";
             case FIGHTING:
-                return "bg-amber-700 text-white";
+                return "bg-orange-600 text-white";
             case POISON:
                 return "bg-purple-800 text-white";
             case GROUND:
-                return "bg-yellow-950 text-white";
+                return "bg-amber-600 text-white";
             case FLYING:
                 return "bg-blue-200 text-white";
             case PSYCHIC:
@@ -36,7 +36,7 @@ public class TypeUtils {
             case ROCK:
                 return "bg-stone-600 text-white";
             case GHOST:
-                return "bg-slate-900 text-white";
+                return "bg-sky-950 text-white";
             case DRAGON:
                 return "bg-purple-500 text-white";
             case DARK:

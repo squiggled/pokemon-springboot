@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokémon Center - Pokédex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      th:href="@{/img/squared_pokemon_transparent.ico}"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="py-5">
+        <!-- nav -->
+        <div class="flex items-center justify-between">
+          <!--login and home -->
+          <div class="flex gap-4">
+            <a href="/" class="text-blue-500 hover:text-blue-700">Home</a>
+            <a href="/party" class="text-blue-500 hover:text-blue-700"
+              >My Party</a
+            >
+          </div>
+          <div>
+            <a href="/">
+              <img
+                th:src="@{/img/pokemon-logo.png}"
+                alt="Pokémon Logo"
+                class="ml-10 h-12"
+              />
+            </a>
+          </div>
+          <!-- other links -->
+          <div class="flex gap-4">
+            <a href="/login" class="text-blue-500 hover:text-blue-700">Login</a>
+            <a href="/quiz" class="text-blue-500 hover:text-blue-700">Challenge</a>
+            <a href="/news" class="text-blue-500 hover:text-blue-700">News</a>
+          </div>
+        </div>
+        <!-- nav end -->
+
+        <!--error page body-->
+        <div class="text-center my-10">
+            <h1 class="text-3xl font-bold mb-4">Oops, you found this error page</h1>
+            <img th:src="@{/img/error-psyduck.png}" alt="Error" class="mx-auto max-w-sm" />
+            <a href="/" class="mt-4 text-blue-500 hover:text-blue-700 inline-block">Back to home</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

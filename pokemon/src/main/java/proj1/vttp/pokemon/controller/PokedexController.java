@@ -10,15 +10,19 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import proj1.vttp.pokemon.model.Party;
 import proj1.vttp.pokemon.model.Pokemon;
 import proj1.vttp.pokemon.model.SimplePokemon;
+import proj1.vttp.pokemon.model.User;
 import proj1.vttp.pokemon.service.PokeAPIService;
 import proj1.vttp.pokemon.service.UserService;
 import proj1.vttp.pokemon.utils.UserUtils;
@@ -66,21 +70,78 @@ public class PokedexController {
 
     // submit login
     @PostMapping("/login")
-    public String processLogin(@RequestParam(name = "login", required = false, defaultValue = "default") String login,
-            HttpSession session, Model model) {
+    public String processLogin(@RequestParam(name = "login", required = false) String login, 
+        @RequestParam(name = "password", required = false) String password,
+        HttpSession session, Model model) {
 
         if ((login.length()<3) || (login==null)){
-            String error = "Name must be at least 3 characters long";
+            String error = "Please enter a username";
             model.addAttribute("error", error);
             return "login";
         }
-        List<Pokemon> userParty = userService.getParty(login); // find party from redis
-        Integer userScore = userService.getScore(login); //find current game score from redis
-        session.setAttribute(UserUtils.USER_SCORE, userScore); //set score for current session
-        session.setAttribute(UserUtils.USER_SESSION, login); // set username for current session
-        session.setAttribute(UserUtils.USER_PARTY, userParty); // set found party to current session
-        model.addAttribute("userParty", userParty);
+        if (password==null){
+            String error = "Please enter a password";
+            model.addAttribute("error", error);
+            return "login";
+        }
 
+        //verify credentials
+        Boolean isValidLogin = userService.isValidLogin(login, password);
+        if (isValidLogin){
+            List<Pokemon> userParty = userService.getParty(login); // find party from redis
+            Integer userScore = userService.getScore(login); //find current game score from redis
+            session.setAttribute(UserUtils.USER_SCORE, userScore); //set score for current session
+            session.setAttribute(UserUtils.USER_SESSION, login); // set username for current session
+            session.setAttribute(UserUtils.USER_PARTY, userParty); // set found party to current session
+            session.setAttribute(UserUtils.IS_LOGGED_IN, true); //flag login as true
+            model.addAttribute("userParty", userParty);
+            return "redirect:/";
+
+        } else {
+            String error = "Wrong username or password";
+            model.addAttribute("error", error);
+            return "login";
+        }
+        
+    }
+
+    //load register page
+    @GetMapping("/register")
+    public String registerPage(HttpSession session, Model model){
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        if ((isLoggedIn==null) || (!isLoggedIn)){
+            model.addAttribute("user", new User());
+            return "register";
+        }
+        String username = (String) session.getAttribute(UserUtils.USER_SESSION);
+        model.addAttribute("currentUser", username);
+        return "register";
+    }
+
+    //register new user
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute User user, BindingResult result, HttpSession session, Model model){
+        if (result.hasErrors()){
+            model.addAttribute("user", user);
+            return "register";   
+        } 
+        String password1 = user.getPassword1();
+        String password2 = user.getPassword2();
+
+        if (!password1.equals(password2)){
+            model.addAttribute("user", user);
+            model.addAttribute("message", "Passwords do not match");
+            return "register";
+        }
+
+        Boolean canRegister = userService.register(user.getUsername(), user);
+        if (!canRegister){
+            model.addAttribute("user", user);
+            model.addAttribute("message", "This user already exists. Please login.");
+            return "register";
+        }
+        session.setAttribute(UserUtils.IS_LOGGED_IN, true); //log the user in
+        session.setAttribute(UserUtils.USER_SESSION, user.getUsername());
         return "redirect:/";
     }
 
@@ -156,6 +217,11 @@ public class PokedexController {
             session.setAttribute(UserUtils.USER_PARTY, currentParty);
         }
         return "redirect:/party";
+    }
+
+    @GetMapping("/error")
+    public String error(){
+        return "error";
     }
 
 }
