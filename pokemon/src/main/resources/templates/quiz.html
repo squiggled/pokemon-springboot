@@ -25,7 +25,7 @@
               <img
                 th:src="@{/img/pokemon-logo.png}"
                 alt="Pokémon Logo"
-                class="ml-10 h-12"
+                class="ml-12 h-12"
               />
             </a>
           </div>
@@ -70,7 +70,7 @@
               <p class="text-xl font-semibold mb-2"> <span th:text="${totalScore}">0</span></p>
               <div th:if="${nextBadge}">
                 <p>Points to next badge: <span th:text="${pointsToNextBadge}">0</span></p>
-                <img class="mx-auto mt-2 h-12" th:src="@{'/img/' + ${nextBadge} + '.png'}" alt="Next Badge"/>
+                <img class="mx-auto mt-2 h-14" th:src="@{'/img/' + ${nextBadge} + '.png'}" alt="Next Badge"/>
               </div>
               <div th:if="${nextBadge} == null">
                 <p>All badges attained!</p>

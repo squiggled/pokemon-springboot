@@ -1,12 +1,12 @@
 function throttle(func, delay){
     let lastCall = 0;
-    return function(...args) {
-        const now = new Date().getTime();
+    return function(...args) { //returns a function that manages the function u want to throttle
+        const now = new Date().getTime(); //return current time in milliseconds
         if (now - lastCall < delay) {
-            return;
+            return; //exit -> dont call the function 
         }
         lastCall = now;
-        return func(...args);
+        return func(...args); //spread operator to forward arguments to func
     };
 };
 
@@ -66,10 +66,10 @@ function loadMorePokemon(){
     if (isLoading) return;
     isLoading = true;
     let offset = document.querySelectorAll('.pokemon-item').length; //count the numebr of elements that have this class applied to it
-    fetch(`/load20more?offset=${offset}&limit=20`)
+    fetch(`/load20more?offset=${offset}&limit=20`) //call rest controller
         .then(response => response.json()) //the restcontroller will return response
         .then(pokemon => {
-            //append new Pokémon to the search results
+            //append new pokemon to the search results
             pokemon.forEach(pokemon => {
                 var pokemonElement = createPokemonElement(pokemon);
                 document.getElementById('searchResults').appendChild(pokemonElement);
@@ -79,7 +79,7 @@ function loadMorePokemon(){
         .catch(error => console.error('Error:', error));
 }
 window.addEventListener('scroll', throttle(function() {
-    //check if the user is near the bottom of the page
+    //check if the user is near the bottom of the page. increase '-100' value if u want to trigger event earlier
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !isLoading) {
         loadMorePokemon();
     }

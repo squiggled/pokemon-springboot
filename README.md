@@ -13,7 +13,7 @@ Pokémon Center is a one-stop hub for every Pokémon trainer. It has three main 
 - News Center
     - NewsAPI integration for updated Pokémon news.
 - Additional features
-    - Automated unit and integration tests to ensure the reliability and functionality of the application.
+    - Automated unit tests to ensure the reliability and functionality of the application.
     - Logging to track code events and for easier debugging. 
 
 ## Installation
@@ -51,4 +51,3 @@ docker run -d -p 8080:8080 pokemon-springboot
 - Thymeleaf
 - Redis
 - JUnit
-- Mockito

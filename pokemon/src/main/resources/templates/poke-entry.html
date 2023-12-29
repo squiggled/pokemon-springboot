@@ -1,99 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="'Pokédex - ' + ${pokemon.name}"></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/squared_pokemon_transparent.ico}" />
-  </head>
-  <body class="bg-gray-100" th:object="${pokemon}">
-    <div class="container mx-auto px-4 py-5">
-      <!-- Back Button -->
-      <div class="text-left mb-4">
-        <a
-          href="/"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >Back</a
-        >
-      </div>
-
-      <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center">
-        <div
-          class="bg-gray-200 text-gray-700 text-lg px-6 py-4"
-          th:text="${pokemon.name}"
-        ></div>
-        <div class="py-4">
-          <img
-            class="w-64 h-64 mx-auto"
-            th:src="${pokemon.imageUrl}"
-            alt="Pokémon Image"
-          />
-        </div>
-        <div
-          class="text-2xl font-semibold mb-4"
-          th:text="${pokemon.name}"
-        ></div>
-
-        <!-- Types -->
-        <div class="flex justify-center mb-4">
-          <span
-            th:if="${pokemon.type1 != null}"
-            th:text="*{type1}"
-            class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-4 mb-2"
-            th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(type1)}"
-          >
-          </span>
-          <span
-            th:if="${pokemon.type2 != null}"
-            th:text="*{type2}"
-            class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2"
-            th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(type2)}"
-          >
-          </span>
-        </div>
-
-        <div class="mb-4">
-          Ability: <span th:text="${pokemon.ability}"></span>
-        </div>
-
-        <div class="px-6 py-4">
-          <div class="font-bold text-xl mb-2">Stats</div>
-          <div class="grid grid-cols-2 gap-4">
-            <div>HP: <span th:text="*{baseHP}"></span></div>
-            <div>Attack: <span th:text="*{baseAtk}"></span></div>
-            <div>Defense: <span th:text="*{baseDef}"></span></div>
-            <div>Special Attack: <span th:text="*{baseSpA}"></span></div>
-            <div>Special Defense: <span th:text="*{baseSpD}"></span></div>
-            <div>Speed: <span th:text="*{baseSpe}"></span></div>
-          </div>
-        </div>
-
-        <div class="px-6 py-4">
-          <div class="font-bold text-xl mb-2">Moves</div>
-          <button id="loadMovesBtn" 
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-          th:data-pokemon-id="${pokemon.id}">
-            Load Moves
-          </button>
-          <div id="movesContainer"></div>
-          <table id="movesTable" class="table-auto w-full mt-4 hidden">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 text-left">Move Name</th>
-                    <th class="px-4 py-2 text-center">Type</th>
-                    <th class="px-4 py-2 text-center">Power</th>
-                    <th class="px-4 py-2 text-center">Accuracy</th>
-                    <th class="px-4 py-2 text-center">PP</th>
-                </tr>
-            </thead>
-            <tbody id="movesTableBody">
-                <!-- rows will be added here -->
-            </tbody>
-        </table>
-        </div>
-        <script th:src="@{/js/loadMoves.js}"></script>
-      </div>
+</head>
+<body class="bg-gray-100" th:object="${pokemon}">
+  <div class="container mx-auto px-4 py-5">
+    <!-- back button -->
+    <div class="text-left mb-4">
+      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</a>
     </div>
-  </body>
+
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden text-center">
+      <div class="py-4">
+        <img class="w-64 h-64 mx-auto" th:src="${pokemon.imageUrl}" alt="Pokémon Image" />
+      </div>
+      <div class="text-2xl font-semibold mb-4" th:text="${pokemon.name}"></div>
+
+      <!-- types -->
+      <div class="flex justify-center mb-4">
+        <span th:if="${pokemon.type1 != null}" th:text="${pokemon.type1 + ' '}" class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-4 mb-2" th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type1)}"></span>
+        <span th:text="${' '}"></span>
+        <span th:if="${pokemon.type2 != null}" th:text="${pokemon.type2}" class="inline-block rounded-full px-3 py-1 text-sm font-semibold mr-2 mb-2" th:class="${T(proj1.vttp.pokemon.utils.TypeUtils).getTypeColourClass(pokemon.type2)}"></span>
+      </div>
+
+      <div class="mb-4">
+        Ability: <span th:text="${pokemon.ability}"></span>
+      </div>
+
+      <!-- stats table -->
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2 text-center">Stats</div>
+        <table class="table-auto mx-auto w-1/8 md:w-1/4 xs:w-full">
+          <tbody class="text-left">
+            <tr><td>HP:</td><td th:text="*{baseHP}"></td></tr>
+            <tr><td>Attack:</td><td th:text="*{baseAtk}"></td></tr>
+            <tr><td>Defense:</td><td th:text="*{baseDef}"></td></tr>
+            <tr><td>Special Attack:</td><td th:text="*{baseSpA}"></td></tr>
+            <tr><td>Special Defense:</td><td th:text="*{baseSpD}"></td></tr>
+            <tr><td>Speed:</td><td th:text="*{baseSpe}"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      
+
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2">Moves</div>
+        <button id="loadMovesBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4" th:data-pokemon-id="${pokemon.id}">Load Moves</button>
+        <div id="movesContainer"></div>
+        <table id="movesTable" class="table-auto w-full mt-4 hidden">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-left">Move Name</th>
+              <th class="px-4 py-2 text-center">Type</th>
+              <th class="px-4 py-2 text-center">Power</th>
+              <th class="px-4 py-2 text-center">Accuracy</th>
+              <th class="px-4 py-2 text-center">PP</th>
+            </tr>
+          </thead>
+          <tbody id="movesTableBody">
+            <!-- rows will be added here -->
+          </tbody>
+        </table>
+      </div>
+      <script th:src="@{/js/loadMoves.js}"></script>
+    </div>
+  </div>
+</body>
 </html>

@@ -3,6 +3,7 @@ package proj1.vttp.pokemon.service;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -109,120 +110,134 @@ public class PokeAPIService {
 
     //return 1 full Pokemon object
     public Pokemon getOnePokemon(Integer id) {
-        String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + id.toString(), String.class);
-        Reader reader = new StringReader(response);
-        JsonReader jsonReader = Json.createReader(reader);
-        JsonObject detailObj = jsonReader.readObject();
+        try {
+            String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + id.toString(), String.class);
+            Reader reader = new StringReader(response);
+            JsonReader jsonReader = Json.createReader(reader);
+            JsonObject detailObj = jsonReader.readObject();
 
-        // create pokemon obj
-        Pokemon pokeObj = new Pokemon();
-        // SET NAME
-        pokeObj.setName(stringFormatter(detailObj.getString("name")));
-        // System.out.println(pokeObj.getName()); //debug
+            // create pokemon obj
+            Pokemon pokeObj = new Pokemon();
+            // SET NAME
+            pokeObj.setName(stringFormatter(detailObj.getString("name")));
+            // System.out.println(pokeObj.getName()); //debug
 
-        // SET ID
-        pokeObj.setId(detailObj.getInt("id"));
-        // System.out.println(pokeObj.getId());
+            // SET ID
+            pokeObj.setId(detailObj.getInt("id"));
+            // System.out.println(pokeObj.getId());
 
-        // SET ABILITY
-        JsonArray abilitiesArray = detailObj.getJsonArray("abilities"); // directly get the jsonarray from detailobj
-        for (JsonValue abilityValue : abilitiesArray) {
-            JsonObject abilityObject = (JsonObject) abilityValue;
-            JsonObject ability = abilityObject.getJsonObject("ability");
-            String abilityName = ability.getString("name");
-            pokeObj.setAbility(stringFormatter(abilityName));
-            // System.out.println(pokeObj.getAbility());
-        }
-
-        // SET IMAGE URL
-        String frontDefaultSpriteUrl = detailObj.getJsonObject("sprites").getString("front_default");
-        pokeObj.setImageUrl(frontDefaultSpriteUrl);
-        // System.out.println(pokeObj.getImageUrl());
-
-        // SET TYPE
-        JsonArray typesArray = detailObj.getJsonArray("types"); // directly get the jsonarray from detailobj
-        for (int i = 0; i < typesArray.size(); i++) {
-            JsonObject typeObj = (JsonObject) typesArray.get(i);
-            if (i == 0) {
-                JsonObject type = typeObj.getJsonObject("type");
-                String typeName = type.getString("name");
-                pokeObj.setType1(mapTypeFromJson(typeName));
-                // System.out.println("type1: " + pokeObj.getType1());
-            } else {
-                JsonObject type = typeObj.getJsonObject("type");
-                String typeName = type.getString("name");
-                pokeObj.setType2(mapTypeFromJson(typeName));
-                // System.out.println("type2: " + pokeObj.getType2());
+            // SET ABILITY
+            JsonArray abilitiesArray = detailObj.getJsonArray("abilities"); // directly get the jsonarray from detailobj
+            for (JsonValue abilityValue : abilitiesArray) {
+                JsonObject abilityObject = (JsonObject) abilityValue;
+                JsonObject ability = abilityObject.getJsonObject("ability");
+                String abilityName = ability.getString("name");
+                pokeObj.setAbility(stringFormatter(abilityName));
+                // System.out.println(pokeObj.getAbility());
             }
-        }
 
-        // SET STATS
-        JsonArray statsArray = detailObj.getJsonArray("stats");
-        for (int i = 0; i < statsArray.size(); i++) {
-            JsonObject statsObj = (JsonObject) statsArray.get(i);
-            int baseStat = statsObj.getInt("base_stat");
+            // SET IMAGE URL
+            String frontDefaultSpriteUrl = detailObj.getJsonObject("sprites").getString("front_default");
+            pokeObj.setImageUrl(frontDefaultSpriteUrl);
+            // System.out.println(pokeObj.getImageUrl());
 
-            switch (i) {
-                case 0:
-                    pokeObj.setBaseHP(baseStat);
-                    break;
-                case 1:
-                    pokeObj.setBaseAtk(baseStat);
-                    break;
-                case 2:
-                    pokeObj.setBaseDef(baseStat);
-                    break;
-                case 3:
-                    pokeObj.setBaseSpA(baseStat);
-                    break;
-                case 4:
-                    pokeObj.setBaseSpD(baseStat);
-                    break;
-                case 5:
-                    pokeObj.setBaseSpe(baseStat);
-                    break;
-                default:
+            // SET TYPE
+            JsonArray typesArray = detailObj.getJsonArray("types"); // directly get the jsonarray from detailobj
+            for (int i = 0; i < typesArray.size(); i++) {
+                JsonObject typeObj = (JsonObject) typesArray.get(i);
+                if (i == 0) {
+                    JsonObject type = typeObj.getJsonObject("type");
+                    String typeName = type.getString("name");
+                    pokeObj.setType1(mapTypeFromJson(typeName));
+                    // System.out.println("type1: " + pokeObj.getType1());
+                } else {
+                    JsonObject type = typeObj.getJsonObject("type");
+                    String typeName = type.getString("name");
+                    pokeObj.setType2(mapTypeFromJson(typeName));
+                    // System.out.println("type2: " + pokeObj.getType2());
+                }
             }
+
+            // SET STATS
+            JsonArray statsArray = detailObj.getJsonArray("stats");
+            for (int i = 0; i < statsArray.size(); i++) {
+                JsonObject statsObj = (JsonObject) statsArray.get(i);
+                int baseStat = statsObj.getInt("base_stat");
+
+                switch (i) {
+                    case 0:
+                        pokeObj.setBaseHP(baseStat);
+                        break;
+                    case 1:
+                        pokeObj.setBaseAtk(baseStat);
+                        break;
+                    case 2:
+                        pokeObj.setBaseDef(baseStat);
+                        break;
+                    case 3:
+                        pokeObj.setBaseSpA(baseStat);
+                        break;
+                    case 4:
+                        pokeObj.setBaseSpD(baseStat);
+                        break;
+                    case 5:
+                        pokeObj.setBaseSpe(baseStat);
+                        break;
+                    default:
+                }
+            }
+            logger.log(Level.INFO, "🟢 Pokemon: %s found".formatted(pokeObj.getName()));
+            return pokeObj;
+
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "🔴 Failed to fetch Pokemon with ID " + id + ": " + e.getMessage());
+            return null; 
         }
-        logger.log(Level.INFO, "🟢 Pokemon: %s found".formatted(pokeObj.getName()));
-        return pokeObj;
+        
     }
 
     //get moves
     public List<String> getMoves(Integer pokemonId) {
-        String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + pokemonId.toString(),
+        try {
+             String response = template.getForObject("https://pokeapi.co/api/v2/pokemon/ " + pokemonId.toString(),
                 String.class);
-        Reader reader = new StringReader(response);
-        JsonReader jsonReader = Json.createReader(reader);
-        JsonObject detailObj = jsonReader.readObject();
-        JsonArray movesArray = detailObj.getJsonArray("moves");
+            Reader reader = new StringReader(response);
+            JsonReader jsonReader = Json.createReader(reader);
+            JsonObject detailObj = jsonReader.readObject();
+            JsonArray movesArray = detailObj.getJsonArray("moves");
 
-        List<String> movesList = new ArrayList<>();
-        for (JsonObject obj : movesArray.getValuesAs(JsonObject.class)) {
-            JsonObject moveObj = obj.getJsonObject("move");
-            String moveName = moveObj.getString("name");
-            String moveUrl = moveObj.getString("url");
+            List<String> movesList = new ArrayList<>();
+            for (JsonObject obj : movesArray.getValuesAs(JsonObject.class)) {
+                JsonObject moveObj = obj.getJsonObject("move");
+                String moveName = moveObj.getString("name");
+                String moveUrl = moveObj.getString("url");
 
-            // fetch more details from the move URL
-            String moveResponse = template.getForObject(moveUrl, String.class);
-            Reader moveReader = new StringReader(moveResponse);
-            JsonReader moveJsonReader = Json.createReader(moveReader);
-            JsonObject moveDetailObj = moveJsonReader.readObject();
-            Integer movePower = moveDetailObj.getInt("power", 0);
-            Integer moveAcc = moveDetailObj.getInt("accuracy", 0);
-            Integer movePp = moveDetailObj.getInt("pp", 0);
+                // fetch more details from the move URL
+                String moveResponse = template.getForObject(moveUrl, String.class);
+                Reader moveReader = new StringReader(moveResponse);
+                JsonReader moveJsonReader = Json.createReader(moveReader);
+                JsonObject moveDetailObj = moveJsonReader.readObject();
+                Integer movePower = moveDetailObj.getInt("power", 0);
+                Integer moveAcc = moveDetailObj.getInt("accuracy", 0);
+                Integer movePp = moveDetailObj.getInt("pp", 0);
 
-            JsonObject typeObject = moveDetailObj.getJsonObject("type");
-            // retrieve "name" field from the "type" object
-            String typeName = typeObject.getString("name");
-            PokemonType moveType = mapTypeFromJson(typeName);
+                JsonObject typeObject = moveDetailObj.getJsonObject("type");
+                // retrieve "name" field from the "type" object
+                String typeName = typeObject.getString("name");
+                PokemonType moveType = mapTypeFromJson(typeName);
 
 
-            String moveDetails = stringFormatter(moveName) + "," + moveType + "," + movePower + ","+ moveAcc + "," + movePp;
-            logger.log(Level.INFO, "🟢 Move added to table %s".formatted(moveDetails));
-            movesList.add(moveDetails);
+                String moveDetails = stringFormatter(moveName) + "," + moveType + "," + movePower + ","+ moveAcc + "," + movePp;
+                logger.log(Level.INFO, "🟢 Move added to table %s".formatted(moveDetails));
+                movesList.add(moveDetails);
+            }
+            return movesList;
+
+        } catch (Exception e){
+            logger.log(Level.WARNING, "🔴 Failed to fetch moves for Pokémon ID " + pokemonId + ": " + e.getMessage());
+            return Collections.emptyList();
         }
-        return movesList;
+        
     }
 
     

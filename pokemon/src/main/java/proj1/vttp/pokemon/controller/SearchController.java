@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import proj1.vttp.pokemon.model.Pokemon;
 import proj1.vttp.pokemon.model.SimplePokemon;
 import proj1.vttp.pokemon.service.PokeAPIService;
 import proj1.vttp.pokemon.service.SearchService;

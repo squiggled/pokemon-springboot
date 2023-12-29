@@ -27,7 +27,6 @@ import proj1.vttp.pokemon.service.PokeAPIService;
 import proj1.vttp.pokemon.service.UserService;
 import proj1.vttp.pokemon.utils.UserUtils;
 
-//for search and initial load
 @Controller
 public class PokedexController {
 
@@ -50,8 +49,10 @@ public class PokedexController {
     // get pokemon detail page
     @GetMapping("/pokemon/{id}")
     public String pokedexEntry(@PathVariable Integer id, Model model) {
-        // System.out.println("id obtained " + id);
         Pokemon pokemon = pokeAPIService.getOnePokemon(id);
+        if (pokemon==null){
+            return "error";
+        }
         model.addAttribute("pokemon", pokemon);
         return "poke-entry";
     }
@@ -102,7 +103,6 @@ public class PokedexController {
             model.addAttribute("error", error);
             return "login";
         }
-        
     }
 
     //load register page

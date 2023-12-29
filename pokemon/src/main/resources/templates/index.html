@@ -26,7 +26,7 @@
               <img
                 th:src="@{/img/pokemon-logo.png}"
                 alt="Pokémon Logo"
-                class="ml-10 h-12"
+                class="ml-12 h-12"
               />
             </a>
           </div>
@@ -66,14 +66,14 @@
         id="initialPokemonList"
         class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-4"
       >
-        <!--iterate over the first 20 Pokémon -->
+        <!--iterate over the first 20 pokemon -->
         <div
           th:each="pokemon, iterStat : ${pokemonList}"
           th:if="${iterStat.count <= 20}"
           class="max-w-sm rounded overflow-hidden shadow-lg bg-white pokemon-item"
         >
           <a th:href="@{/pokemon/{id}(id=${pokemon.id})}" class="block">
-            <!--link to Pokémon detail page -->
+            <!--link to pokemon detail page -->
             <img
               th:src="${pokemon.imageUrl}"
               alt="Pokémon Image"
