@@ -137,7 +137,7 @@ public class PokedexController {
         Boolean canRegister = userService.register(user.getUsername(), user);
         if (!canRegister){
             model.addAttribute("user", user);
-            model.addAttribute("message", "This user already exists. Please login.");
+            model.addAttribute("message", "This user already exists.");
             return "register";
         }
         session.setAttribute(UserUtils.IS_LOGGED_IN, true); //log the user in

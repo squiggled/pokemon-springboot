@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
 import proj1.vttp.pokemon.model.Article;
-import proj1.vttp.pokemon.model.Question;
 
 @SpringBootTest
 public class NewsAPIServiceTest {
@@ -62,7 +61,7 @@ public class NewsAPIServiceTest {
             assertEquals("http://sample.com/article", article.getArticleUrl());
             assertEquals("sample description.", article.getDescription());
             assertEquals("sample title", article.getTitle());
-            // assertEquals("http://pokemontrivia-1-c0774976.deta.app/assets/gen4/skuntank.png", result.getImageUrl());
+            assertEquals("http://sample.com/image.jpg", article.getImageUrl());
         }   
         
     }

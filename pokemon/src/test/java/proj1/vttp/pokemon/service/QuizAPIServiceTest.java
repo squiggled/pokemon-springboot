@@ -2,21 +2,16 @@ package proj1.vttp.pokemon.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,8 +42,7 @@ public class QuizAPIServiceTest {
 
     @BeforeEach
     public void setup() {
-        when(template.getForObject(anyString(), eq(String.class))).thenReturn(mockResponse); // return mockResponse if
-                                                                                             // the conditions are met
+        when(template.getForObject(anyString(), eq(String.class))).thenReturn(mockResponse); // return mockResponse if conditions are met
     }
 
     @Test
