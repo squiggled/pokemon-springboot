@@ -119,7 +119,7 @@ function createPokemonElement(pokemon) {
                 <div>Type: ${pokemon.type2}</div>
             </div>
         </a>
-        <form action="/addToTeam" method="post">
+        <form action="/addToTeam" method="post" class="add-to-team-form" data-pokemon-name="${pokemon.name}">
             <input type="hidden" name="pokemonId" value="${pokemon.id}" />
             <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-4">
                 Add

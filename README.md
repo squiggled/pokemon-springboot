@@ -1,7 +1,7 @@
 # Pokémon Center
 
 ## Description
-Pokémon Center is a one-stop hub for every Pokémon trainer. It has three main functions - a Pokédex and team builder feature, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
+Pokémon Center is a one-stop hub for every Pokémon trainer. It has three main functions - a Pokédex and team builder, an ultimate quiz challenge to show off your Pokémon knowledge, and a news center for updated Pokémon information. 
 
 ## Features
 - PokéDex + Team Builder
