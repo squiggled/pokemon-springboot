@@ -15,6 +15,7 @@
 	<description>Pokemon API - SpringBoot</description>
 	<properties>
 		<java.version>21</java.version>
+		<bootstrap.version>4.0.0-2</bootstrap.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() { //only run js after a
             .then(response => response.json()) //get response from service
             .then(data => {
                 //clear the initial Pokémon list container
-                document.getElementById('initialPokemonList').innerHTML = ''; //select the appropriate DOM element
+                document.getElementById('initialPokemonList').innerHTML = ''; //select DOM element
                 //update the page with the search results in a diff container
                 updateSearchResults(data);
             })
@@ -43,6 +43,28 @@ document.addEventListener('DOMContentLoaded', function() { //only run js after a
     if (searchButton) {
         searchButton.addEventListener('click', performSearch);
     }
+
+    document.addEventListener('submit', function(event) {
+        if (event.target.matches('.add-to-team-form')) {
+            event.preventDefault();
+            const form = event.target;
+            const pokemonName = form.getAttribute('data-pokemon-name');
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new URLSearchParams(new FormData(form)),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    showNotif(`${pokemonName} has been added to your party!`);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
 });
 
 function updateSearchResults(data) {
@@ -79,7 +101,7 @@ function loadMorePokemon(){
         .catch(error => console.error('Error:', error));
 }
 window.addEventListener('scroll', throttle(function() {
-    //check if the user is near the bottom of the page. increase '-100' value if u want to trigger event earlier
+    //check if the user is near the bottom of the page. increase '-100' value if want to trigger event earlier
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100 && !isLoading) {
         loadMorePokemon();
     }
@@ -104,4 +126,13 @@ function createPokemonElement(pokemon) {
             </button>
         </form>`;
     return pokemonElement;
+}
+
+function showNotif(message) {
+    var snackbar = document.getElementById("snackbar");
+
+    snackbar.textContent = message;
+    snackbar.className = "show";
+
+    setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
 }
